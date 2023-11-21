@@ -10,7 +10,7 @@ import numpy as np
 import scipy.stats as stats
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
-from funcs.funcs import pdf
+from funcs import pdf
 
 # Define parameters
 #mu = [5, 5.3, 5.6]; sigma = [0.02, 0.01, 0.03]; lam = [0.5, 0.6, 0.4]; f = [0.9, 0.5, 0.1]; alpha = 5; beta = 5.6

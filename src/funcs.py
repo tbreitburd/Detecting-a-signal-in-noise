@@ -102,9 +102,9 @@ def plot_pdf_d(mu, sigma, lam, f, alpha, beta):
     pdf_true = pdf(x, mu, sigma, lam, f, alpha, beta)
 
     # Plot
-    plt.plot(x, signal_, style = '--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
-    plt.plot(x, background_, style = '--', color = 'g', label='Background, b(M; \u03BB)')
-    plt.plot(x, pdf_, color = 'k', label='PDF')
+    plt.plot(x, signal_,'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
+    plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
+    plt.plot(x, pdf_true, color = 'k', label='PDF')
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()

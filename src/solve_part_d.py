@@ -1,4 +1,4 @@
-from funcs.funcs import signal, background, pdf, plot_pdf_d
+from funcs import plot_pdf_d
 import matplotlib.pyplot as plt
 
 # Define true parameters
