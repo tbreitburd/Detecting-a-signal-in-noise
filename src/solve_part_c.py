@@ -46,4 +46,12 @@ def pdf(M,mu, sigma, lam, f, alpha, beta):
 
 
 
-# 
+# Define parameters
+#mu = [5, 5.3, 5.6]; sigma = [0.02, 0.01, 0.03]; lam = [0.5, 0.6, 0.4]; f = [0.9, 0.5, 0.1]; alpha = 5; beta = 5.6
+
+Int_1,_ = integrate.fixed_quad(lambda x: pdf(x, 5, 0.02, 0.5, 0.9, 5, 5.6), 5, 5.6, n=10)
+Int_2,_ = integrate.fixed_quad(lambda x: pdf(x, 5.3, 0.01, 0.6, 0.5, 5, 5.6), 5, 5.6, n=10)
+Int_3,_ = integrate.fixed_quad(lambda x: pdf(x, 5.6, 0.03, 0.4, 0.1, 5, 5.6), 5, 5.6, n=10)
+
+print(Int_1, Int_2, Int_3)
+
