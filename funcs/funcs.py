@@ -5,6 +5,38 @@ import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 
 
+def signal(M, mu, sigma):
+    """ 
+    This function defines the signal component of the pdf.
+    ----------------------------
+    Inputs:
+    M: r.v. M, float (when calculating a probability for a specific value of M)
+    mu: mean of signal (normal) component, float, must be within alpha and beta
+    sigma: width of signal (normal) component, float, must be positive
+    ----------------------------
+    Outputs:
+    signal: signal component of pdf, float
+    """
+
+    signal = stats.norm.pdf(M, mu, sigma)
+
+    return signal
+
+def background(M, lam):
+    """ 
+    This function defines the background component of the pdf.
+    ----------------------------
+    Inputs:
+    M: r.v. M, float (when calculating a probability for a specific value of M)
+    lam: decay parameter of background (exponential) component, float
+    ----------------------------
+    Outputs:
+    background: background component of pdf, float
+    """
+
+    background = stats.expon.pdf(M, scale=1/lam)
+
+    return background
 
 def pdf(M,mu, sigma, lam, f, alpha, beta):
     """
@@ -38,3 +70,44 @@ def pdf(M,mu, sigma, lam, f, alpha, beta):
     return pdf
 
 
+def plot_pdf_d(mu, sigma, lam, f, alpha, beta):
+    """
+    This function plots the signal component,
+    the background component,
+    the pdf of M, using the normalisation factor derived in (b),
+    all overlaid on the same plot.
+    ----------------------------
+    Inputs:
+    alpha: lower limit of M, float
+    beta: upper limit of M, float
+    mu: mean of signal (normal) component, float, must be within alpha and beta
+    sigma: width of signal (normal) component, float, must be positive
+    lam: decay parameter of background (exponential) component, float
+    f: ratio of signal/background components, float
+    ----------------------------
+    Outputs:
+    plot of signal component, background component, normalised pdf of M
+    """
+
+    # Define x-axis
+    x = np.linspace(alpha, beta, 1000)
+
+    # Define signal component
+    signal_ = signal(x, mu, sigma)
+
+    # Define background component
+    background_ = background(x, lam)
+
+    # Define pdf
+    pdf_true = pdf(x, mu, sigma, lam, f, alpha, beta)
+
+    # Plot
+    plt.plot(x, signal_, style = '--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
+    plt.plot(x, background_, style = '--', color = 'g', label='Background, b(M; \u03BB)')
+    plt.plot(x, pdf_, color = 'k', label='PDF')
+    plt.xlabel('M')
+    plt.ylabel('Probability density')
+    plt.legend()
+    plt.show()
+
+    return None
