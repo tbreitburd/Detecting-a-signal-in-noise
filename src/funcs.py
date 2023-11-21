@@ -108,6 +108,7 @@ def plot_pdf_d(mu, sigma, lam, f, alpha, beta):
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()
+    plt.savefig('/Users/thomasbreitburd/Documents/CAMBRIDGE/Study/Principles_of_DS/Coursework/tmb76/plot_pdf_d.png')
     plt.show()
 
     return None

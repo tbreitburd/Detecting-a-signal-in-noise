@@ -12,4 +12,3 @@ alpha = 5
 beta = 5.6
 
 plot_pdf_d(mu_true, sigma_true, lam_true, f_true, alpha, beta)
-plt.savefig("plots/pdf_d.pdf")
