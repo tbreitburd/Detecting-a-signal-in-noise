@@ -7,14 +7,14 @@
 # scipy.integrate to help you. 
 
 import scipy.integrate as integrate
-from funcs import pdf
+from funcs import pdf_norm
 
 # Define parameters
 #mu = [5, 5.3, 5.6]; sigma = [0.02, 0.01, 0.03]; lam = [0.5, 0.6, 0.4]; f = [0.9, 0.5, 0.1]; alpha = 5; beta = 5.6
 
-Int_1,_ = integrate.fixed_quad(lambda x: pdf(x, 5, 0.02, 0.5, 0.9, 5, 5.6), 5, 5.6, n=10)
-Int_2,_ = integrate.fixed_quad(lambda x: pdf(x, 5.3, 0.01, 0.6, 0.5, 5, 5.6), 5, 5.6, n=10)
-Int_3,_ = integrate.fixed_quad(lambda x: pdf(x, 5.6, 0.03, 0.4, 0.1, 5, 5.6), 5, 5.6, n=10)
+Int_1,_ = integrate.fixed_quad(lambda x: pdf_norm(x, 5, 0.02, 0.5, 0.9, 5, 5.6), 5, 5.6, n=10)
+Int_2,_ = integrate.fixed_quad(lambda x: pdf_norm(x, 5.3, 0.01, 0.6, 0.5, 5, 5.6), 5, 5.6, n=10)
+Int_3,_ = integrate.fixed_quad(lambda x: pdf_norm(x, 5.6, 0.03, 0.4, 0.1, 5, 5.6), 5, 5.6, n=10)
 
 print("The integral of the pdf, for the given parameters is: \n" +
       "\u03BC = 5, \u03C3 = 0.02, \u03BB = 0.5, f = 0.9: " + str(Int_1) + "\n" +
