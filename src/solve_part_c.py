@@ -6,8 +6,6 @@
 # You may use predefined methods in libraries such as scipy.stats and
 # scipy.integrate to help you. 
 
-import numpy as np
-import scipy.stats as stats
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 from funcs import pdf
@@ -19,5 +17,7 @@ Int_1,_ = integrate.fixed_quad(lambda x: pdf(x, 5, 0.02, 0.5, 0.9, 5, 5.6), 5, 5
 Int_2,_ = integrate.fixed_quad(lambda x: pdf(x, 5.3, 0.01, 0.6, 0.5, 5, 5.6), 5, 5.6, n=10)
 Int_3,_ = integrate.fixed_quad(lambda x: pdf(x, 5.6, 0.03, 0.4, 0.1, 5, 5.6), 5, 5.6, n=10)
 
-print(Int_1, Int_2, Int_3)
-
+print("The integral of the pdf, for the given parameters is: \n" +
+      "\u03BC = 5, \u03C3 = 0.02, \u03BB = 0.5, f = 0.9: " + str(Int_1) + "\n" +
+      "\u03BC = 5.3, \u03C3 = 0.01, \u03BB = 0.6, f = 0.5: " + str(Int_2) + "\n" +
+      "\u03BC = 5.6, \u03C3 = 0.03, \u03BB = 0.4, f = 0.1: " + str(Int_3))
