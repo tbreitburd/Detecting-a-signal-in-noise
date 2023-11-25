@@ -290,7 +290,7 @@ def pdf_e(M, mu, sigma, lam, f):
     # define the pdf
     pdf = ( f * norm.pdf(M, loc = mu, scale = sigma)
             +
-            (1-f) * expon.pdf(M, lam)
+            (1-f) * expon.pdf(M, 1/lam)
             )
 
     return pdf
@@ -317,7 +317,7 @@ def pdf_norm_e(M, mu, sigma, lam, f):
     # define the pdf
     pdf = ( f * truncnorm.pdf(M, alpha, beta, loc = mu, scale = sigma)
             +
-            (1-f) * truncexpon.pdf(M, alpha, beta, 0, lam)
+            (1-f) * truncexpon.pdf(M, alpha, beta, 0, 1/lam)
             )
 
     return pdf
@@ -373,7 +373,7 @@ def background_e(M, lam):
     background: background component of pdf, float
     """
 
-    background = expon.pdf(M, lam)
+    background = expon.pdf(M, 1/lam)
 
     return background
 
@@ -392,7 +392,7 @@ def background_norm_e(M, lam):
     alpha = 5
     beta = 5.6
 
-    background = truncexpon.pdf(M, alpha, beta, 0, lam)
+    background = truncexpon.pdf(M, alpha, beta, 0, 1/lam)
 
     return background
 
@@ -415,12 +415,12 @@ def cdf_e(M, mu, sigma, lam, f):
     # define the pdf
     cdf = ( f * truncnorm.cdf(M, alpha, beta, loc = mu, scale = sigma)
             +
-            (1-f) * truncexpon.cdf(M, alpha, beta, 0, lam)
+            (1-f) * truncexpon.cdf(M, alpha, beta, 0, 1/lam)
             )
 
     return cdf
 
-def plot_pdf_e(pdf, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
+def plot_pdf_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     """
     This function plots the generated sample,
     estimates of the signal component,
@@ -453,6 +453,7 @@ def plot_pdf_e(pdf, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     pdf_true = pdf(x, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta)
 
     # Plot
+    plt.hist(gen_sample, color = 'b', alpha = 0.7, bins = 100, density = True, label = 'Generated sample') 
     plt.plot(x, signal_,'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
     plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
     plt.plot(x, pdf_true, color = 'k', label='PDF')
