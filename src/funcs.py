@@ -245,6 +245,32 @@ def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
 from numba_stats import truncnorm, truncexpon, norm, expon
 
 
+def accept_reject(f,alpha, beta, sample_size):
+    """
+    This function implements the accept-reject method to generate samples from a given pdf.
+    ----------------------------
+    Inputs:
+    f: pdf, function
+    alpha: lower limit of domain, float
+    beta: upper limit of domain, float
+    sample_size: number of samples to generate, int
+    ----------------------------
+    Outputs:
+    M_accepted: samples from pdf, array
+    """
+    
+    X = np.random.uniform(alpha, beta, sample_size)
+    y_max = f(X).max()
+    X = None
+    M_accepted = []
+    while len(M_accepted) < sample_size:
+        M = np.random.uniform(alpha, beta)
+        y = np.random.uniform(0, y_max)
+        if y < f(M):
+            M_accepted.append(M)
+    return M_accepted
+
+
 def pdf_e(M, mu, sigma, lam, f):
     """
     This function defines the probability density function of M,
