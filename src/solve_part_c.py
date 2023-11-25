@@ -7,7 +7,6 @@
 # scipy.integrate to help you. 
 
 import scipy.integrate as integrate
-import matplotlib.pyplot as plt
 from funcs import pdf
 
 # Define parameters
