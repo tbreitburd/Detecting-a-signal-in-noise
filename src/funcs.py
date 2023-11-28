@@ -477,7 +477,7 @@ def plot_pdf_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
 #----------------------------------------------------------------
 
 
-def plot_e(sample_sizes, discovery_rates):
+def plot_f(sample_sizes, discovery_rates):
     """
     This function plots the discovery rate against the sample size.
     ----------------------------
