@@ -3,7 +3,7 @@ import numpy as np
 import scipy.stats as stats
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
-
+import os
 
 def signal(M, mu, sigma):
     """ 
@@ -188,7 +188,9 @@ def plot_pdf_d(pdf, mu, sigma, lam, f, alpha, beta):
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()
-    plt.savefig('/Users/thomasbreitburd/Documents/CAMBRIDGE/Study/Principles_of_DS/Coursework/tmb76/plot_pdf_d.png')
+    proj_dir = os.path.dirname(os.getcwd())
+    plot_dir = os.path.join(proj_dir, 'plot_pdf_d.png')
+    plt.savefig(plot_dir)
     plt.show()
 
     return None
@@ -233,7 +235,9 @@ def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()
-    plt.savefig('/Users/thomasbreitburd/Documents/CAMBRIDGE/Study/Principles_of_DS/Coursework/tmb76/plot_pdf_d_comp.png')
+    proj_dir = os.path.dirname(os.getcwd())
+    plot_dir = os.path.join(proj_dir, 'plot_pdf_d_comp.png')
+    plt.savefig(plot_dir)
     plt.show()
 
     return None
@@ -460,7 +464,38 @@ def plot_pdf_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()
-    plt.savefig('/Users/thomasbreitburd/Documents/CAMBRIDGE/Study/Principles_of_DS/Coursework/tmb76/plot_e.png')
+    proj_dir = os.path.dirname(os.getcwd())
+    plot_dir = os.path.join(proj_dir, 'plot_pdf_e.png')
+    plt.savefig(plot_dir)
+    plt.show()
+
+    return None
+
+
+#----------------------------------------------------------------
+#------------------------ PART F --------------------------------
+#----------------------------------------------------------------
+
+
+def plot_e(sample_sizes, discovery_rates):
+    """
+    This function plots the discovery rate against the sample size.
+    ----------------------------
+    Inputs:
+    sample_sizes: sample sizes, array
+    discovery_rates: discovery rates, array
+    ----------------------------
+    Outputs:
+    plot of discovery rate against sample size
+    """
+
+    plt.plot(sample_sizes, discovery_rates, color = '--', marker = 'x', label='Discovery rate')
+    plt.xlabel('Sample size')
+    plt.ylabel('Discovery rate (%)')
+    plt.legend()
+    proj_dir = os.path.dirname(os.getcwd())
+    plot_dir = os.path.join(proj_dir, 'plot_e.png')
+    plt.savefig(plot_dir)
     plt.show()
 
     return None
