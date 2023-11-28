@@ -2,7 +2,7 @@ from scipy.stats import chi2
 from iminuit import cost, Minuit
 import numpy as np
 import matplotlib.pyplot as plt
-from funcs import accept_reject, pdf_norm_e, plot_f
+from funcs import accept_reject, pdf_norm_e, plot_f, cdf_e
 
 
 np.random.seed(75016)
@@ -32,7 +32,9 @@ for sample_size in sample_sizes:
         
         M_bootstrap = np.random.choice(M, size = sample_size, replace = True)
 
-        nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_e)
+        bins = np.linspace(5,5.6,int(sample_size/10))
+        bin_counts, bin_edges = np.histogram(M, bins=bins)
+        nll = cost.BinnedNLL(bin_counts, bin_edges, cdf_e)
         
         # Run the fit for the null hypothesis
         mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
