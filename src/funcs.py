@@ -189,7 +189,9 @@ def plot_pdf_d(pdf, mu, sigma, lam, f, alpha, beta):
     plt.ylabel('Probability density')
     plt.legend()
     proj_dir = os.path.dirname(os.getcwd())
-    plot_dir = os.path.join(proj_dir, 'plot_pdf_d.png')
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_pdf_d.png')
     plt.savefig(plot_dir)
     plt.show()
 
@@ -236,7 +238,9 @@ def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
     plt.ylabel('Probability density')
     plt.legend()
     proj_dir = os.path.dirname(os.getcwd())
-    plot_dir = os.path.join(proj_dir, 'plot_pdf_d_comp.png')
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_pdf_d_comp.png')
     plt.savefig(plot_dir)
     plt.show()
 
@@ -465,7 +469,9 @@ def plot_pdf_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     plt.ylabel('Probability density')
     plt.legend()
     proj_dir = os.path.dirname(os.getcwd())
-    plot_dir = os.path.join(proj_dir, 'plot_pdf_e.png')
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_pdf_e.png')
     plt.savefig(plot_dir)
     plt.show()
 
@@ -494,7 +500,9 @@ def plot_f(sample_sizes, discovery_rates):
     plt.ylabel('Discovery rate (%)')
     plt.legend()
     proj_dir = os.path.dirname(os.getcwd())
-    plot_dir = os.path.join(proj_dir, 'plot_f.png')
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_f.png')
     plt.savefig(plot_dir)
     plt.show()
 
