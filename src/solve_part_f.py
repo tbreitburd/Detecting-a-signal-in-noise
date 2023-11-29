@@ -29,12 +29,9 @@ for sample_size in sample_sizes:
 
     for i in range(1000):
 
-        
-        M_bootstrap = np.random.choice(M, size = sample_size, replace = True)
+        M_bootstrap = np.random.choice(M, size=sample_size, replace=True)
 
-        bins = np.linspace(5,5.6,int(sample_size/10))
-        bin_counts, bin_edges = np.histogram(M, bins=bins)
-        nll = cost.BinnedNLL(bin_counts, bin_edges, cdf_e)
+        nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_e)
         
         # Run the fit for the null hypothesis
         mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
@@ -56,7 +53,6 @@ for sample_size in sample_sizes:
         mi_alt.limits['lam'] = (0.01,1)
         mi_alt.limits['sigma'] = (0,0.05)
         mi_alt.limits['mu'] = (5,5.6)
-        mi_alt.values['f'] = f
         H_alt = mi_alt.migrad()
 
         alt_params = list(mi_alt.values)
@@ -64,9 +60,8 @@ for sample_size in sample_sizes:
 
         # Calculate the test statistic
         T = null_min - alt_min
-        alt_chisq = T
         alt_ndof = 1
-        alt_pval = 1 - chi2.cdf(alt_chisq, alt_ndof)
+        alt_pval = 1 - chi2.cdf(T, alt_ndof)
 
         if alt_pval < 2.9e-7:
             discovery.append(1)
@@ -85,5 +80,5 @@ for sample_size in sample_sizes:
     if all(rate > 90 for rate in discovery_rates[-3:]):
         break
 
-plot_f(sample_sizes, discovery_rates)
+plot_f(sample_sizes[:len(discovery_rates)], discovery_rates)
 

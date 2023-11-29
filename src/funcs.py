@@ -489,12 +489,12 @@ def plot_f(sample_sizes, discovery_rates):
     plot of discovery rate against sample size
     """
 
-    plt.plot(sample_sizes, discovery_rates, color = 'k', style = '--', marker = 'x', label='Discovery rate')
+    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
     plt.xlabel('Sample size')
     plt.ylabel('Discovery rate (%)')
     plt.legend()
     proj_dir = os.path.dirname(os.getcwd())
-    plot_dir = os.path.join(proj_dir, 'plot_e.png')
+    plot_dir = os.path.join(proj_dir, 'plot_f.png')
     plt.savefig(plot_dir)
     plt.show()
 
