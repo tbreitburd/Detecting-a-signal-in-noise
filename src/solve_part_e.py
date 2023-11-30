@@ -26,7 +26,7 @@ M_pdf = accept_reject(pdf_true, alpha, beta, 100000)
 # Define the negative log likelihood function
 nll = cost.UnbinnedNLL(M_pdf, pdf_norm_e)
 
-mi_unbin = Minuit(nll,  f = 0.15,  lam=0.4, mu=5.2, sigma = 0.020)
+mi_unbin = Minuit(nll,  f = 0.15,  lam=0.4, mu=5.3, sigma = 0.020)
 mi_unbin.limits['f'] = (0,1)
 mi_unbin.limits['lam'] = (0.01,1)
 mi_unbin.limits['sigma'] = (0,0.05)
@@ -47,7 +47,7 @@ bin_counts, bin_edges = np.histogram(M_pdf, bins=bins)
 binned_nll = cost.BinnedNLL(bin_counts, bin_edges, cdf_e)
 
 # Now, we minimize that function using iminuit.
-mi_bin = Minuit(binned_nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
+mi_bin = Minuit(binned_nll,  f = 0.2,  lam=0.4, mu=5.3, sigma = 0.02)
 mi_bin.limits['f'] = (0,0.5)
 mi_bin.limits['lam'] = (0.01,1)
 mi_bin.limits['sigma'] = (0,0.05)

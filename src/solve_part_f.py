@@ -37,7 +37,7 @@ for sample_size in sample_sizes:
         nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_e)
         
         # Run the fit for the null hypothesis
-        mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
+        mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.3, sigma = 0.02)
         mi_null.limits['f'] = (0,1)
         mi_null.limits['lam'] = (0.01,1)
         mi_null.limits['sigma'] = (0,20)
@@ -50,7 +50,7 @@ for sample_size in sample_sizes:
         null_min = mi_null.fval
     
         # Run the fit for the alternate hypothesis
-        mi_alt = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
+        mi_alt = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.3, sigma = 0.02)
         mi_alt.limits['f'] = (0,1)
         mi_alt.limits['lam'] = (0.01,1)
         mi_alt.limits['sigma'] = (0.0001,20)
