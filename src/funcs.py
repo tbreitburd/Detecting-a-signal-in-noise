@@ -150,105 +150,8 @@ def pdf_norm(M,mu, sigma, lam, f, alpha, beta):
     return pdf
 
 
-def plot_pdf_d(pdf, mu, sigma, lam, f, alpha, beta):
-    """
-    This function plots the signal component,
-    the background component,
-    the pdf of M, using the normalisation factor derived in (b),
-    all overlaid on the same plot.
-    ----------------------------
-    Inputs:
-    alpha: lower limit of M, float
-    beta: upper limit of M, float
-    mu: mean of signal (normal) component, float, must be within alpha and beta
-    sigma: width of signal (normal) component, float, must be positive
-    lam: decay parameter of background (exponential) component, float
-    f: ratio of signal/background components, float
-    ----------------------------
-    Outputs:
-    plot of signal component, background component, normalised pdf of M
-    """
-
-    # Define x-axis
-    x = np.linspace(alpha, beta, 1000)
-
-    # Define signal component
-    signal_ = signal(x, mu, sigma)
-
-    # Define background component
-    background_ = background(x, lam)
-
-    # Define pdf
-    pdf_true = pdf(x, mu, sigma, lam, f, alpha, beta)
-
-    # Plot
-    plt.plot(x, signal_,'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
-    plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
-    plt.plot(x, pdf_true, color = 'k', label='PDF')
-    plt.xlabel('M')
-    plt.ylabel('Probability density')
-    plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
-    plots_dir = os.path.join(proj_dir, 'plots')
-    os.makedirs(plots_dir, exist_ok=True)
-    plot_dir = os.path.join(plots_dir, 'plot_pdf_d.png')
-    plt.savefig(plot_dir)
-    plt.show()
-
-    return None
-
-
-def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
-    """
-    This function plots the signal component,
-    the background component,
-    the pdf of M, using the normalisation factor derived in (b),
-    all overlaid on the same plot,
-    using component-wise normaliation.
-    ----------------------------
-    Inputs:
-    alpha: lower limit of M, float
-    beta: upper limit of M, float
-    mu: mean of signal (normal) component, float, must be within alpha and beta
-    sigma: width of signal (normal) component, float, must be positive
-    lam: decay parameter of background (exponential) component, float
-    f: ratio of signal/background components, float
-    ----------------------------
-    Outputs:
-    plot of signal component, background component, normalised pdf of M
-    """
-
-    # Define x-axis
-    x = np.linspace(alpha, beta, 1000)
-
-    # Define signal component
-    signal_ = signal_norm(x, mu, sigma, alpha, beta)
-
-    # Define background component
-    background_ = background_norm(x, lam, alpha, beta)
-
-    # Define pdf
-    pdf_true = pdf(x, mu, sigma, lam, f, alpha, beta)
-
-    # Plot
-    plt.plot(x, signal_,'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
-    plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
-    plt.plot(x, pdf_true, color = 'k', label='PDF')
-    plt.xlabel('M')
-    plt.ylabel('Probability density')
-    plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
-    plots_dir = os.path.join(proj_dir, 'plots')
-    os.makedirs(plots_dir, exist_ok=True)
-    plot_dir = os.path.join(plots_dir, 'plot_pdf_d_comp.png')
-    plt.savefig(plot_dir)
-    plt.show()
-
-    return None
-
-
 #----------------------------------------------------------------
-#------------------------ PART E --------------------------------
+#------------------------ PART E, F, G--------------------------------
 #----------------------------------------------------------------
 from numba_stats import truncnorm, truncexpon, norm, expon
 
@@ -279,7 +182,7 @@ def accept_reject(f,alpha, beta, sample_size):
     return M_accepted
 
 
-def pdf_e(M, mu, sigma, lam, f):
+def pdf_efg(M, mu, sigma, lam, f):
     """
     This function defines the probability density function of M,
     within the limits alpha and beta.
@@ -304,7 +207,7 @@ def pdf_e(M, mu, sigma, lam, f):
     return pdf
 
 
-def pdf_norm_e(M, mu, sigma, lam, f):
+def pdf_norm_efg(M, mu, sigma, lam, f):
     """
     This function defines the probability density function of M,
     within the limits alpha and beta.
@@ -331,7 +234,7 @@ def pdf_norm_e(M, mu, sigma, lam, f):
     return pdf
 
 
-def signal_e(M, mu, sigma):
+def signal_efg(M, mu, sigma):
     """ 
     This function defines the signal component of the pdf.
     ----------------------------
@@ -351,7 +254,7 @@ def signal_e(M, mu, sigma):
     return signal
 
 
-def signal_norm_e(M, mu, sigma):
+def signal_norm_efg(M, mu, sigma):
     """ 
     This function defines the signal component of the pdf.
     ----------------------------
@@ -369,7 +272,7 @@ def signal_norm_e(M, mu, sigma):
     return signal
 
 
-def background_e(M, lam):
+def background_efg(M, lam):
     """ 
     This function defines the background component of the pdf.
     ----------------------------
@@ -386,7 +289,7 @@ def background_e(M, lam):
     return background
 
 
-def background_norm_e(M, lam):
+def background_norm_efg(M, lam):
     """ 
     This function defines the background component of the pdf.
     ----------------------------
@@ -405,7 +308,7 @@ def background_norm_e(M, lam):
     return background
 
 
-def cdf_e(M, mu, sigma, lam, f):
+def cdf_efg(M, mu, sigma, lam, f):
     """
     This function defines the cumulative distribution function of M,
     within the limits alpha and beta.
@@ -427,60 +330,6 @@ def cdf_e(M, mu, sigma, lam, f):
             )
 
     return cdf
-
-def plot_pdf_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
-    """
-    This function plots the generated sample,
-    estimates of the signal component,
-    the background component,
-    and total probability,
-    all overlaid on the same plot,
-    ----------------------------
-    Inputs:
-    alpha: lower limit of M, float
-    beta: upper limit of M, float
-    mu: mean of signal (normal) component, float, must be within alpha and beta
-    sigma: width of signal (normal) component, float, must be positive
-    lam: decay parameter of background (exponential) component, float
-    f: ratio of signal/background components, float
-    ----------------------------
-    Outputs:
-    plot of signal component, background component, normalised pdf of M
-    """
-
-    # Define x-axis
-    x = np.linspace(alpha, beta, 1000)
-
-    # Define signal component
-    signal_ = signal_norm_e(x, mu_hat, sigma_hat)
-
-    # Define background component
-    background_ = background_norm_e(x, lam_hat)
-
-    # Define pdf
-    pdf_true = pdf(x, mu_hat, sigma_hat, lam_hat, f_hat)
-
-    # Plot
-    plt.hist(gen_sample, color = 'b', alpha = 0.7, bins = 100, density = True, label = 'Generated sample') 
-    plt.plot(x, signal_,'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
-    plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
-    plt.plot(x, pdf_true,'--', color = 'k', label='PDF')
-    plt.xlabel('M')
-    plt.ylabel('Probability density')
-    plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
-    plots_dir = os.path.join(proj_dir, 'plots')
-    os.makedirs(plots_dir, exist_ok=True)
-    plot_dir = os.path.join(plots_dir, 'plot_pdf_e.png')
-    plt.savefig(plot_dir)
-    plt.show()
-
-    return None
-
-
-#----------------------------------------------------------------
-#------------------------ PART F --------------------------------
-#----------------------------------------------------------------
 
 
 def plot_f(sample_sizes, discovery_rates):
