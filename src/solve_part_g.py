@@ -105,7 +105,7 @@ for sample_size in sample_sizes:
         # Calculate the test statistic
         T = null_min - alt_min
         # Set the number of degrees of freedom
-        alt_ndof = 1.76 # the number of degrees of freedom for the test statistic distribution under the null hypothesis
+        alt_ndof = 2.13 # the number of degrees of freedom for the test statistic distribution under the null hypothesis
 
         # Calculate the p-value
         alt_pval = 1 - chi2.cdf(T, alt_ndof)
