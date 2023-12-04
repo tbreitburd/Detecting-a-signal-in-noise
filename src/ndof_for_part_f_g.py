@@ -104,7 +104,7 @@ for i in range(1000): # Run 1000 toys
     M_bootstrap = np.random.choice(M, size=sample_size, replace=True)
 
     # Define the cost function, here the unbinned Negative Log Likelihood
-    nll = cost.UnbinnedNLL(M, pdf_norm_g)
+    nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_g)
         
     # Run the fit for the null hypothesis, just 1 signal component
     mi_null = Minuit(nll,  f1 = 0.2, f2 = 0.1, lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
