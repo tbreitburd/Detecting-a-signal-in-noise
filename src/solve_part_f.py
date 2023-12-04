@@ -2,8 +2,8 @@ from scipy.stats import chi2
 from iminuit import cost, Minuit
 import numpy as np
 import matplotlib.pyplot as plt
-from funcs import accept_reject, pdf_norm_e, plot_f, cdf_e
-import csv
+from funcs import accept_reject, pdf_norm_efg
+import os
 
 
 np.random.seed(75016)
@@ -17,7 +17,7 @@ alpha = 5
 beta = 5.6
 
 # Define the pdf
-pdf_true = lambda x: pdf_norm_e(x, mu, sigma, lam, f)
+pdf_true = lambda x: pdf_norm_efg(x, mu, sigma, lam, f)
 sample_sizes = [100, 200, 300, 400, 500, 550, 600, 650, 700, 800, 900, 1000, 2000, 3000, 4000, 5000]
 
 discovery_rates = []
@@ -34,7 +34,7 @@ for sample_size in sample_sizes:
         M_bootstrap = np.random.choice(M, size=sample_size, replace=True)
 
 
-        nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_e)
+        nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_efg)
         
         # Run the fit for the null hypothesis
         mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.3, sigma = 0.02)
@@ -63,7 +63,7 @@ for sample_size in sample_sizes:
 
         # Calculate the test statistic
         T = null_min - alt_min
-        alt_ndof = 2
+        alt_ndof = 1.76
         alt_pval = 1 - chi2.cdf(T, alt_ndof)
 
         if alt_pval < 2.9e-7:
@@ -84,13 +84,32 @@ for sample_size in sample_sizes:
         break
 
 
-    
-    
+# Define plotting function
+def plot_f(sample_sizes, discovery_rates):
+    """
+    This function plots the discovery rate against the sample size.
+    ----------------------------
+    Inputs:
+    sample_sizes: sample sizes, array
+    discovery_rates: discovery rates, array
+    ----------------------------
+    Outputs:
+    plot of discovery rate against sample size
+    """
 
-# Save M_bootstrap to a csv file
-#with open('M_bootstrap.csv', 'w', newline='') as csvfile:
-#    writer = csv.writer(csvfile)
-#    writer.writerows(M_bootstrap)
+    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
+    plt.xlabel('Sample size')
+    plt.ylabel('Discovery rate (%)')
+    plt.legend()
+    proj_dir = os.path.dirname(os.getcwd())
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_f.png')
+    plt.savefig(plot_dir)
+    plt.show()
 
+    return None
+
+# Plot the results
 plot_f(sample_sizes[:len(discovery_rates)], discovery_rates)
 

@@ -332,27 +332,32 @@ def cdf_efg(M, mu, sigma, lam, f):
     return cdf
 
 
-def plot_f(sample_sizes, discovery_rates):
-    """
-    This function plots the discovery rate against the sample size.
+def pdf_norm_g(M, mu_1, mu_2, sigma, lam, f1, f2):
+    """ 
+    This function defines the normalised pdf for the given parameters.
     ----------------------------
     Inputs:
-    sample_sizes: sample sizes, array
-    discovery_rates: discovery rates, array
+    M: r.v. M, float (when calculating a probability for a specific value of M)
+    mu_1: mean of 1st signal (normal) component, float, must be within alpha and beta
+    mu_2: mean of 2nd signal (normal) component, float, must be within alpha and beta
+    sigma: width of both signals (normal) component, float, must be positive
+    lam: decay parameter of background (exponential) component, float
+    f1: fraction of 1st signal component, float, must be between 0 and 1
+    f2: fraction of 2nd signal component, float, must be between 0 and 1
     ----------------------------
     Outputs:
-    plot of discovery rate against sample size
+    pdf: normalised pdf for the given parameters, float
     """
+    # Define the r.v. domain limits
+    alpha = 5
+    beta = 5.6
 
-    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
-    plt.xlabel('Sample size')
-    plt.ylabel('Discovery rate (%)')
-    plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
-    plots_dir = os.path.join(proj_dir, 'plots')
-    os.makedirs(plots_dir, exist_ok=True)
-    plot_dir = os.path.join(plots_dir, 'plot_f.png')
-    plt.savefig(plot_dir)
-    plt.show()
-
-    return None
+    # Define the pdf
+    pdf = ( f1 * truncnorm.pdf(M, alpha, beta, loc = mu_1, scale = sigma)
+            +
+            f2 * truncnorm.pdf(M, alpha, beta, loc = mu_2, scale = sigma)
+            +
+            (1-f1-f2) * truncexpon.pdf(M, alpha, beta, 0, 1/lam)
+            )
+    
+    return pdf
