@@ -378,7 +378,7 @@ def plot_discovery_rates(sample_sizes, discovery_rates):
     plt.xlabel('Sample size')
     plt.ylabel('Discovery rate (%)')
     plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
+    proj_dir = os.getcwd()
     plots_dir = os.path.join(proj_dir, 'plots')
     os.makedirs(plots_dir, exist_ok=True)
     plot_dir = os.path.join(plots_dir, 'plot_f.png')
