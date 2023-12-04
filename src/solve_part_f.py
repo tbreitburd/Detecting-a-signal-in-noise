@@ -2,7 +2,7 @@ from scipy.stats import chi2
 from iminuit import cost, Minuit
 import numpy as np
 import matplotlib.pyplot as plt
-from funcs import accept_reject, pdf_norm_efg
+from funcs import accept_reject, pdf_norm_efg, plot_discovery_rates
 import os
 
 
@@ -84,32 +84,6 @@ for sample_size in sample_sizes:
         break
 
 
-# Define plotting function
-def plot_f(sample_sizes, discovery_rates):
-    """
-    This function plots the discovery rate against the sample size.
-    ----------------------------
-    Inputs:
-    sample_sizes: sample sizes, array
-    discovery_rates: discovery rates, array
-    ----------------------------
-    Outputs:
-    plot of discovery rate against sample size
-    """
-
-    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
-    plt.xlabel('Sample size')
-    plt.ylabel('Discovery rate (%)')
-    plt.legend()
-    proj_dir = os.path.dirname(os.getcwd())
-    plots_dir = os.path.join(proj_dir, 'plots')
-    os.makedirs(plots_dir, exist_ok=True)
-    plot_dir = os.path.join(plots_dir, 'plot_f.png')
-    plt.savefig(plot_dir)
-    plt.show()
-
-    return None
-
 # Plot the results
-plot_f(sample_sizes[:len(discovery_rates)], discovery_rates)
+plot_discovery_rates(sample_sizes[:len(discovery_rates)], discovery_rates)
 

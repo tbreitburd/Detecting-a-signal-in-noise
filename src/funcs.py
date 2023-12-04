@@ -361,3 +361,28 @@ def pdf_norm_g(M, mu_1, mu_2, sigma, lam, f1, f2):
             )
     
     return pdf
+
+def plot_discovery_rates(sample_sizes, discovery_rates):
+    """
+    This function plots the discovery rate against the sample size.
+    ----------------------------
+    Inputs:
+    sample_sizes: sample sizes, array
+    discovery_rates: discovery rates, array
+    ----------------------------
+    Outputs:
+    plot of discovery rate against sample size
+    """
+
+    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
+    plt.xlabel('Sample size')
+    plt.ylabel('Discovery rate (%)')
+    plt.legend()
+    proj_dir = os.path.dirname(os.getcwd())
+    plots_dir = os.path.join(proj_dir, 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_dir = os.path.join(plots_dir, 'plot_f.png')
+    plt.savefig(plot_dir)
+    plt.show()
+
+    return None
