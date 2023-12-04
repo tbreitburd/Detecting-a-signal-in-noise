@@ -108,7 +108,7 @@ for i in range(1000): # Run 1000 toys
         
     # Run the fit for the null hypothesis, just 1 signal component
     mi_null = Minuit(nll,  f1 = 0.2, f2 = 0.1, lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-    mi_null.limits['f1'] = (0,1)
+    mi_null.limits['f1'] = (0.01,1)
     mi_null.limits['lam'] = (0.00001, None)
     mi_null.values['f2'] = 0
     mi_null.fixed['f2'] = True
@@ -118,8 +118,8 @@ for i in range(1000): # Run 1000 toys
 
     # Run the fit for the alternate hypothesis, 2 signal components
     mi_alt = Minuit(nll,  f1 = 0.2, f2 = 0.1,  lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-    mi_null.limits['f1'] = (0,1)
-    mi_null.limits['f2'] = (0,1)
+    mi_null.limits['f1'] = (0.01,1)
+    mi_null.limits['f2'] = (0.01,1)
     mi_alt.limits['lam'] = (0.00001, None)
     mi_alt.limits['sigma'] = (0.00001, None)
     mi_alt.limits['mu_1'] = (5,5.6)
