@@ -132,4 +132,4 @@ for sample_size in sample_sizes:
         break
 
 # Plot the results
-plot_discovery_rates(sample_sizes[:len(discovery_rates)], discovery_rates, g)
+plot_discovery_rates(sample_sizes[:len(discovery_rates)], discovery_rates, 'g')
