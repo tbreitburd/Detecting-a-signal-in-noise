@@ -126,7 +126,7 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     
     # Top figure true pdf, background and signal lines
     x = np.linspace(bin_widths[0], bin_widths[-1], 200)
-    ax[0,0].plot(x, f_hat * signal_ * N * bin_width[0],'--',color = 'r', label='Signal, s(M; \u03BC, \u03C3)')
+    ax[0,0].plot(x, f_hat * signal_ * N * bin_width[0],'--',color = 'r', label='f * Signal, s(M; \u03BC, \u03C3)')
     ax[0,0].plot(x, (1 - f_hat) * background_ * N * bin_width[0],'--', color = 'g', label='Background, b(M; \u03BB)')
     ax[0,0].plot(x, pdf_vals * N * bin_width[0],'--', color = 'k', label='PDF')
     ax[0,0].legend(loc='upper right')
