@@ -2,8 +2,10 @@ import scipy.integrate as integrate
 import numpy as np
 from funcs import pdf_norm
 
+# Set the random seed
+np.random.seed(75016)
 # Set the number of tests we want to run to test
-num_tests = 3
+num_tests = 5
 
 print("The integral of the pdf, for the given parameters is:")
 
