@@ -1,42 +1,134 @@
-%--------------------
-% Packages
-% -------------------
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8x]{inputenc}
-\usepackage[T1]{fontenc}
-%\usepackage{gentium}
-\usepackage{mathptmx} % Use Times Font
-\usepackage{amsmath}
+\documentclass[12pt]{report} % Increased the font size to 12pt
+\usepackage{epigraph}
+\usepackage{geometry}
 
-\usepackage[pdftex]{graphicx} % Required for including pictures
-\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
-\usepackage{calc} % To reset the counter in the document after title page
-\usepackage{enumitem} % Includes lists
+% Optional: customize the style of epigraphs
+\setlength{\epigraphwidth}{0.5\textwidth} % Adjust the width of the epigraph
+\renewcommand{\epigraphflush}{flushright} % Align the epigraph to the right
+\renewcommand{\epigraphrule}{0pt} % No horizontal rule
+\usepackage[most]{tcolorbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref} % Added for hyperlinks
+\usepackage{listings} % Added for code listings
+\usepackage{color}    % Added for color definitions
+\usepackage[super]{nth} 
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
 
-\frenchspacing % No double spacing between sentences
-\linespread{1.2} % Set linespace
-\usepackage[a4paper, lmargin=0.15\paperwidth, rmargin=0.15\paperwidth, tmargin=0.1\paperheight, bmargin=0.1\paperheight]{geometry} %margins
-%\usepackage{parskip}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
-\usepackage[all]{nowidow} % Tries to remove widows
-\usepackage[protrusion=true,expansion=true]{microtype} % Improves typography, load after fontpackage is selected
+% Define the header and footer for general pages
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyhead{} % Initially, the header is empty
+\fancyfoot[C]{\thepage} % Page number at the center of the footer
+\renewcommand{\headrulewidth}{0pt} % No header line on the first page of chapters
+\renewcommand{\footrulewidth}{0pt} % No footer line
 
-\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
-
-
-%-----------------------
-% Set pdf information and add title, fill in the fields
-%-----------------------
-\hypersetup{ 	
-pdfsubject = {},
-pdftitle = {S1 Coursework Report},
-pdfauthor = {tmb76}
+% Define the plain page style for chapter starting pages
+\fancypagestyle{plain}{%
+  \fancyhf{} % Clear all header and footer fields
+  \fancyfoot[C]{\thepage} % Page number at the center of the footer
+  \renewcommand{\headrulewidth}{0pt} % No header line
 }
 
-\newcommand{\halfindent}{\hspace{0.5\parindent}}
-%-----------------------
-% Begin document
-%-----------------------
+% Apply the 'fancy' style to subsequent pages in a chapter
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\MakeUppercase{#1}}{}%
+}
+
+% Redefine the 'plain' style for the first page of chapters
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% Header settings for normal pages (not the first page of a chapter)
+\fancyhead[L]{\slshape \nouppercase{\leftmark}} % Chapter title in the header
+\renewcommand{\headrulewidth}{0.4pt} % Header line width on normal pages
+
+\setlength{\headheight}{14.49998pt}
+\addtolength{\topmargin}{-2.49998pt}
+% Define colors for code listings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Setup for code listings
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Definition of the tcolorbox for definitions
+\newtcolorbox{definitionbox}{
+  colback=red!5!white,
+  colframe=red!75!black,
+  colbacktitle=red!85!black,
+  title=Definition:,
+  fonttitle=\bfseries,
+  enhanced,
+}
+
+% Definition of the tcolorbox for remarks
+\newtcolorbox{remarkbox}{
+  colback=blue!5!white,     % Light blue background
+  colframe=blue!75!black,   % Darker blue frame
+  colbacktitle=blue!85!black, % Even darker blue for the title background
+  title=Remark:,            % Title text for remark box
+  fonttitle=\bfseries,      % Bold title font
+  enhanced,
+}
+
+% Definition of the tcolorbox for examples
+\newtcolorbox{examplebox}{
+  colback=green!5!white,
+  colframe=green!75!black,
+  colbacktitle=green!85!black,
+  title=Example:,
+  fonttitle=\bfseries,
+  enhanced,
+}
+
+% Definitions and examples will be put in these environments
+\newenvironment{definition}
+    {\begin{definitionbox}}
+    {\end{definitionbox}}
+
+\newenvironment{example}
+    {\begin{examplebox}}
+    {\end{examplebox}}
+
+\geometry{top=1.5in} % Adjust the value as needed
+% ----------------------------------------------------------------------------------------
+
+
+
 \begin{document} 
 
 \section{Section A}
@@ -51,22 +143,157 @@ p(M;f,\lambda,\mu,\sigma) = fs(M;\mu,\sigma) + (1 - f)b(M;\lambda)
 \end{equation}
 where:
 \begin{center}
-$s(M;\mu,\sigma) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(M - \mu)^{2}}{2\sigma^{2}}}$
+$s(M;\mu,\sigma) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{{(M - \mu)}^{2}}{2\sigma^{2}}}$
 \end{center}
-\vspace{1\baselineskip}
 \begin{center}
 $b(M;\lambda) = \lambda e^{-\lambda M}$
 \end{center}
-\vspace{1\baselineskip}
-
-We want to show that:
-
+\vspace{1\baselineskip}  
+We want to show that:  
 \begin{equation}
 I = \int_{-\infty}^{+\infty} p(M;f,\lambda,\mu,\sigma)\, dM = 1
 \end{equation}
+We have:  
 
+\vspace{1\baselineskip}  
+$I = \displaystyle\int_{-\infty}^{+\infty} fs(M;\mu,\sigma) + (1-f)b(M;\lambda), dM$  
+
+$I = \displaystyle\int_{-\infty}^{+\infty} f\frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{{(M - \mu)}^{2}}{2\sigma^{2}}}\, dM +  \displaystyle\int_{0}^{+\infty} (1-f)\lambda e^{-\lambda M}\, dM$  
+
+\vspace*{1\baselineskip}
+Since the exponential decay distribution is only defined from 0 to $+\infty$. We can first evaluate the 2\textsuperscript{nd} integral:  
+
+\vspace*{1\baselineskip}
+$\displaystyle \int_{0}^{+\infty} (1-f)\lambda e^{-\lambda M}\, dM  =  (1-f){[-e^{-\lambda M}]}_{0}^{\infty}  =  (1-f)[0 - (-1)]  =  (1-f)$  
+
+\vspace*{1\baselineskip}
+Then, we evaluate the integral of the signal part of the model, taking the $f$ weight out. We use a change of variable so that $u = \frac{(M-\mu)}{\sigma} \iff du = \sigma dM$, thus:
+
+\vspace*{1\baselineskip}
+$J = \displaystyle \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{{(M - \mu)}^{2}}{2\sigma^{2}}}\, dM = \displaystyle \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{{(u)}^{2}}{2}}\, du$  
+
+\vspace*{1\baselineskip}
+We can square multiply this integral by itself, using dummy variables x and y:  
+
+\vspace*{1\baselineskip}
+$J^{2} = \displaystyle \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{{(x)}^{2}}{2}}\, dx \times \displaystyle \int_{-\infty}^{+\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{{(y)}^{2}}{2}}\, dy$  
+
+$J^{2} = \frac{1}{2\pi}\displaystyle \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty}  e^{-\frac{{(x)}^{2}}{2}} e^{-\frac{{(y)}^{2}}{2}}\, dx \, dy$  
+
+$J^{2} = \frac{1}{2\pi}\displaystyle \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} e^{-\frac{1}{2}(x^{2}+y^{2})}\, dx \, dy$  
+
+\vspace*{1\baselineskip}
+From here, we can switch to polar coordinates to be able to evaluate this. We have $x = r\cos{(\theta)} y = r\sin{(\theta)}$. This means we need to change the limits to polar equivalents. We will get $r \in{[0,\infty]}$ and $\theta \in{[0,2\pi]}$. Further, $dx dy = r dr d\theta$  
+
+\vspace*{1\baselineskip}
+$J^{2} = \frac{1}{2\pi}\displaystyle \int_{0}^{2\pi} \int_{0}^{+\infty} e^{-\frac{1}{2}r^{2}}r\, dr \, d\theta$  
+
+$J^{2} = \frac{1}{2\pi}\displaystyle \int_{0}^{2\pi} {[-e^{-\frac{1}{2}r^{2}}]}_{0}^{\infty}\, d\theta$  
+
+$J^{2} = \frac{1}{2\pi}\displaystyle \int_{0}^{2\pi} [-0 - (-1)]\, d\theta$  
+
+$J^{2} = \displaystyle \frac{1}{2\pi}\displaystyle \int_{0}^{2\pi} 1\, d\theta$  
+
+$J^{2} = \displaystyle \frac{1}{2\pi}\displaystyle {[\theta]}_{0}^{2\pi}$  
+
+$J^{2} = \displaystyle \frac{1}{2\pi}\displaystyle {[2\pi - 0]}$  
+
+$J^{2} = 1$ 
+
+\vspace*{1\baselineskip}
+This then means that $J = \pm 1$ but since $s(M;\mu,\sigma) > 0 \forall M \in [-\infty,\infty]$, $ J = 1$. Thus: $I = (1-f) + f = 1$.  
+
+
+\subsection*{(b)}
+We want to find an expression of $p(M;\vec{\theta})$ such that it is normalised between $\alpha$ and $\beta$. Now because the signal fraction $f$ is such that:
+
+\begin{equation}
+    \frac{s(M;\mu,\sigma)}{b(M;\lambda)} = \frac{f}{1-f}
+\end{equation}
+
+This means that we need to normalise the signal and background components separately. This gives:
+
+\begin{equation}
+    \displaystyle \int_{\alpha}^{\beta} f N_{s} \times s(M;\mu,\sigma) + (1 - f)N_{b} \times b(M;\lambda)\, dM = 1
+\end{equation}  
+
+with:
+
+\begin{equation}
+    \frac{1}{N_{s}} = \displaystyle \int_{\alpha}^{\beta} s(M;\mu,\sigma)\, dM
+\end{equation}
+
+\begin{equation}
+    \frac{1}{N_{b}} = \displaystyle \int_{\alpha}^{\beta} b(M;\lambda)\, dM.
+\end{equation}
+
+\vspace*{1\baselineskip}
+where $N_{s}$ and $N_{b}$ are a function of parameters $\vec{\theta}$. We know that for the normal and exponential decay distributions have c.d.f.:  
+
+\begin{equation}
+    Normal: \displaystyle F(X) = \frac{1}{2}[1 + erf(\frac{X - \mu}{\sigma\sqrt{2}})]
+\end{equation}  
+
+\begin{equation}
+    Exponential\ Decay: \displaystyle F(X) = 1 - e^{-\lambda X}
+\end{equation}  
+
+\vspace*{1\baselineskip}
+From equation (5) and (6), we can write the normalisation factors as:
+
+\begin{equation}
+    \frac{1}{N_{s}} = \int_{\alpha}^{\beta} s(M;\mu,\sigma)\, dM = \frac{1}{2}[1 + erf(\frac{\beta - \mu}{\sigma\sqrt{2}})] - \frac{1}{2}[1 + erf(\frac{\alpha - \mu}{\sigma\sqrt{2}})]
+\end{equation}
+
+\begin{equation}
+    \frac{1}{N_{b}} = \int_{\alpha}^{\beta} b(M;\lambda)\, dM = (1 - e^{-\lambda \beta}) - (1 - e^{-\lambda \alpha})
+\end{equation}
+
+\subsection*{(c)}
+
+In this question, we check that part (b)'s results do hold up for different values of $\vec{\theta}$ parameters. For this specific case, the \texttt{scipy.integrate} library is used to numerically integrate the component-wise normalised p.d.f.\ as described in equation (4). Though instead of explicitly defining $N_{s}$ and $N_{b}$, like in equations (9) and (10), the \texttt{scipy.integrate} library is used once more to numerically integrate the signal and background components separately. Then, the weighted sum of the two is computed, using \texttt{scipy.stats} library's \texttt{norm.pdf} and \texttt{expon.pdf} methods (cf. \texttt{funcs.py} file, \texttt{pdf\_norm} function). Finally, that p.d.f.\ is integrated from $\alpha$ to $\beta$, with randomly generated $\vec{\theta}$ parameters, using \texttt{random.uniform}. The results are shown in the table below:
+
+\begin{center}
+    \begin{table}[htbp]
+        \begin{tabular}{ |c|c|c|c|c| } 
+            \hline
+            $\mu$ & $\sigma$ & $\lambda$ & $f$ & $Integral$ \\ 
+            \hline
+            5.2357 & 0.0190 & 0.3643 & 0.5044 & 1.0 \\ 
+            \hline
+            5.5436 & 0.0105 & 0.3823 & 0.6081 & 1.0 \\ 
+            \hline
+            5.3184 & 0.0214 & 0.6424 & 0.6882 & 1.0 \\ 
+            \hline
+            5.3621 & 0.0221 & 0.3695 & 0.3625 & 1.0 \\ 
+            \hline
+            5.3640 & 0.0231 & 0.5015 & 0.2442 & 1.0 \\ 
+            \hline
+        \end{tabular}
+        \centering
+        \caption{Results for different values of $\vec{\theta}$ parameters. (cf. \texttt{solve\_part\_c.py} file)}
+    \end{table}
+\end{center}
+
+\subsection*{(d)}  
+
+For this question, the true values of the parameters were set and used to plot the p.d.f.\ of the model, along with the signal and background component overlayed. The parameters are thus assumed to be:
+
+\begin{center}
+    $\mu = 5.28$  
+    $\sigma = 0.018$  
+    $\lambda = 0.5$  
+    $f = 0.1$
+\end{center}
+
+The \texttt{signal\_norm}, \texttt{background\_norm}, and \texttt{pdf\_norm} functions which are described in (c) were used to compute the p.d.f. of the model, signal, and background, normalised for $M\in{[5,5.6]}$. The results are shown in the figure below:
+
+%\begin{figure}[htbp]
+%    \centering
+%    \includegraphics[width=0.8\textwidth]{Plots/plot_pdf_d_comp.png}
+%    \caption{Plot of the total p.d.f.\ of the model, signal, and background, normalised for $M\in{[5,5.6]}$.}
+%\end{figure}
 
 
 \section{Section B}
-
 \end{document}
