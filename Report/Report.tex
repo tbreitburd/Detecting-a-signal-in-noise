@@ -1,0 +1,72 @@
+%--------------------
+% Packages
+% -------------------
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{gentium}
+\usepackage{mathptmx} % Use Times Font
+\usepackage{amsmath}
+
+\usepackage[pdftex]{graphicx} % Required for including pictures
+\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
+\usepackage{calc} % To reset the counter in the document after title page
+\usepackage{enumitem} % Includes lists
+
+\frenchspacing % No double spacing between sentences
+\linespread{1.2} % Set linespace
+\usepackage[a4paper, lmargin=0.15\paperwidth, rmargin=0.15\paperwidth, tmargin=0.1\paperheight, bmargin=0.1\paperheight]{geometry} %margins
+%\usepackage{parskip}
+
+\usepackage[all]{nowidow} % Tries to remove widows
+\usepackage[protrusion=true,expansion=true]{microtype} % Improves typography, load after fontpackage is selected
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+
+%-----------------------
+% Set pdf information and add title, fill in the fields
+%-----------------------
+\hypersetup{ 	
+pdfsubject = {},
+pdftitle = {S1 Coursework Report},
+pdfauthor = {tmb76}
+}
+
+\newcommand{\halfindent}{\hspace{0.5\parindent}}
+%-----------------------
+% Begin document
+%-----------------------
+\begin{document} 
+
+\section{Section A}
+
+\subsection*{(a)}
+
+We have the continuous random variable $M \in{[5;5.6]}$. Our model is the weighted sum of a background and signal such that:  
+
+
+\begin{equation}
+p(M;f,\lambda,\mu,\sigma) = fs(M;\mu,\sigma) + (1 - f)b(M;\lambda)
+\end{equation}
+where:
+\begin{center}
+$s(M;\mu,\sigma) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(M - \mu)^{2}}{2\sigma^{2}}}$
+\end{center}
+\vspace{1\baselineskip}
+\begin{center}
+$b(M;\lambda) = \lambda e^{-\lambda M}$
+\end{center}
+\vspace{1\baselineskip}
+
+We want to show that:
+
+\begin{equation}
+I = \int_{-\infty}^{+\infty} p(M;f,\lambda,\mu,\sigma)\, dM = 1
+\end{equation}
+
+
+
+\section{Section B}
+
+\end{document}

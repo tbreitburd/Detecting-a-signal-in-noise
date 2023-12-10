@@ -1,5 +1,9 @@
 /src/__pycache__
 .DS_Store
-plot_e.png
-plot_pdf_d.png
-plot_pdf_d_comp.png
+/Report/Report.aux
+/Report/Report.log
+/Report/Report.out
+/Report/Report.synctex.gz
+/Report/Report.fls
+/Report/Report.fdb_latexmk
+/Plots
