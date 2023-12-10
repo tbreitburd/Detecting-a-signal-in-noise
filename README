@@ -1,1 +1,29 @@
-Put your instructions for running the code here
+# S1 Principles of Data Science Coursework  
+
+## Description  
+This repositery contains the code and written report for the S1 PDS coursework. The aim was to demonstrate applications of statistics to..
+
+## Contents  
+
+
+## How to run the code
+All code can be run from the command line as follows:
+
+```bash
+$ python src/solve_part_*.py
+```
+
+where * can be letters c through to g.
+Additionally, there is a ndof_part_f_g.py file which covers determining the appropriate number of degrees of freedom to be used in parts (f) and (g) (cf. part (f) and (g)'s code). This is also in the src/ directory, and can therefore be run in a similar fashion:
+
+```bash
+$ python src/ndof_part_f_g.py
+```
+
+Relevant outputs will be printed by the code, and any plots generated will be saved to a Plots/ directory inside tmb76/, that will get created if it doesn't exist yet.
+
+
+Note on time: The codes for part (c) to part (e) should each take less than a minute to run. For part (f), the code should take less than 5 minutes, with part (g) taking a little longer at The ndof_part_f_g.py is one of the more time consuming files to run, and could take around 10-15 minutes to run. This is based on running all of these on a MacBook Air M2 (2022, Ventura 13.2.1), with 8 GB of Memory.
+
+
+
