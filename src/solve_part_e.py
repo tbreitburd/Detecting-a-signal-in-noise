@@ -61,7 +61,7 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
                             gridspec_kw=dict(hspace=0, wspace=0, height_ratios=(3,1), width_ratios=(7,1)))
 
     # Top figure generated samples
-    ax[0,0].errorbar( bin_centres, bin_counts, errors, fmt='ko')
+    ax[0,0].errorbar( bin_centres, bin_counts, errors, fmt='ko', label = 'Generated Sample')
     
     # Top figure true pdf, background and signal lines
     x = np.linspace(bin_widths[0], bin_widths[-1], 200)
@@ -70,13 +70,14 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     ax[0,0].plot(x, pdf_vals * N * bin_width[0],'--', color = 'k', label='PDF')
     ax[0,0].legend(loc='upper right')
     ax[0,0].grid()
+    ax[0,0].set_ylabel('Counts')
 
     # Bottom figure pull plot
     ax[1,0].errorbar( bin_centres, pull, np.ones_like(bin_centres), fmt='ko')
     
     # Add a flat line at 0
     ax[1,0].plot(x, np.zeros_like(x))
-    ax[1,0].set_xlabel('$X$')
+    ax[1,0].set_xlabel('$M$')
     ax[1,0].set_ylabel('Pull')
 
     # Pull distribution figure
@@ -150,6 +151,48 @@ mu_est = mi_bin.values['mu']
 sigma_est = mi_bin.values['sigma']
 lam_est = mi_bin.values['lam']
 f_est = mi_bin.values['f']
+
+# From iminuit, we can plot the profile likelihoods for each parameter, with their 1-stdev errors.
+
+fig, ax = plt.subplots(2, 2, figsize=(8,8))
+subplot_titles = ['\u03BC', '\u03C3', '\u03BB', 'f']
+
+plt.suptitle('Profile Likelihoods of Parameters, with 1-stdev Errors')
+
+plt.subplot(2,2,1)
+mi_bin.draw_profile('mu',  band = True)
+plt.ylabel('Profile Likelihood')
+plt.title(subplot_titles[0])
+plt.grid()
+
+plt.subplot(2,2,2)
+mi_bin.draw_profile('sigma', band = True)
+plt.ylabel(None)
+plt.xticks([0.0175, 0.018, 0.0185, 0.019])
+plt.title(subplot_titles[1])
+plt.grid()
+
+plt.subplot(2,2,3)
+mi_bin.draw_profile('lam', band = True)
+plt.ylabel('Profile Likelihood')
+plt.title(subplot_titles[2])
+plt.grid()
+
+plt.subplot(2,2,4)
+mi_bin.draw_profile('f', band = True)
+plt.ylabel(None)
+plt.title(subplot_titles[3])
+plt.grid()
+
+plt.tight_layout()
+
+proj_dir = os.getcwd()
+plots_dir = os.path.join(proj_dir, 'plots')
+os.makedirs(plots_dir, exist_ok=True)
+plot_dir = os.path.join(plots_dir, 'plot_profile_likelihood_e.png')
+plt.savefig(plot_dir)
+
+plt.show()
 
 
 # Plot the pdf with the estimated parameters
