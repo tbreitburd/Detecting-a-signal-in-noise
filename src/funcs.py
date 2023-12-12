@@ -378,7 +378,7 @@ def plot_discovery_rates(sample_sizes, discovery_rates, part):
     plt.plot(sample_sizes, np.linspace(90,90,len(sample_sizes)), color='red')
     plt.xlabel('Sample size')
     plt.ylabel('Discovery rate (%)')
-    plt.legend()
+    plt.legend(['Discovery rate', '90%'], loc='lower right')
     proj_dir = os.getcwd()
     plots_dir = os.path.join(proj_dir, 'plots')
     os.makedirs(plots_dir, exist_ok=True)

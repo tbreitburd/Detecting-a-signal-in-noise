@@ -1,0 +1,73 @@
+\begin{thebibliography}{10}
+
+\bibitem{python-random}
+Python~Software Foundation.
+\newblock random.uniform.
+\newblock \url{https://docs.python.org/3/library/random.html#random.uniform}, Accessed: September 2021.
+
+\bibitem{Haslwanter2022}
+Thomas Haslwanter.
+\newblock {\em An Introduction to Statistics with Python}.
+\newblock Springer Cham, 2 edition.
+
+\bibitem{huelsenbeck1997phylogeny}
+John~P. Huelsenbeck and Keith~A. Crandall.
+\newblock Phylogeny estimation and hypothesis testing using maximum likelihood.
+\newblock {\em Annual Review of Ecology and Systematics}, 28:437--466, 1997.
+
+\bibitem{iminuitBasics}
+iminuit.
+\newblock iminuit tutorial basics documentation.
+\newblock \url{https://iminuit.readthedocs.io/en/stable/notebooks/basic.html}, Accessed: September 2021.
+
+\bibitem{iminuitmethod}
+iminuit.
+\newblock iminuit tutorial documentation.
+\newblock \url{https://iminuit.readthedocs.io/en/stable/notebooks/cost_functions.html#Maximum-likelihood-fits}, Accessed: September 2021.
+
+\bibitem{iminuitCOST}
+iminuit.
+\newblock iminuit.cost() cost functions documentation.
+\newblock \url{https://iminuit.readthedocs.io/en/stable/reference.html#module-iminuit.cost}, Accessed: September 2021.
+
+\bibitem{iminuitMigrad}
+iminuit.
+\newblock iminuit.migrad() minimization documentation.
+\newblock \url{https://iminuit.readthedocs.io/en/stable/reference.html#iminuit.Minuit.migrad}, Accessed: September 2021.
+
+\bibitem{iminuitMinuit}
+iminuit.
+\newblock iminuit.minuit documentation.
+\newblock \url{https://iminuit.readthedocs.io/en/stable/reference.html#minuit}, Accessed: September 2021.
+
+\bibitem{kenzie2014properties}
+Matthew Kenzie.
+\newblock {\em Properties of the Higgs-like state around 125 GeV in its decay into two photons at the CMS experiment}.
+\newblock PhD thesis, Imperial Coll., London, 2014.
+
+\bibitem{numba-stats}
+Numba-Stats.
+\newblock Numba-stats description.
+\newblock \url{https://pypi.org/project/numba-stats/}, Accessed: September 2021.
+
+\bibitem{scipy-integrate}
+SciPy.
+\newblock Scipy - integration functions.
+\newblock \url{https://docs.scipy.org/doc/scipy/reference/integrate.html}, Accessed: September 2021.
+
+\bibitem{scipy-stats}
+SciPy.
+\newblock Scipy - statistical functions.
+\newblock \url{https://docs.scipy.org/doc/scipy/reference/stats.html}, Accessed: September 2021.
+
+\bibitem{Wass}
+Larry Wasserman.
+\newblock {\em All of Statistics: A Concise Course in Statistical Inference}.
+\newblock Springer New York, NY, 2004.
+
+\bibitem{wiki-rejection-sampling}
+Wikipedia.
+\newblock Rejection sampling.
+\newblock \url{https://en.wikipedia.org/wiki/Rejection_sampling}, Accessed: September 2021.
+
+\end{thebibliography}
