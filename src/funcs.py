@@ -374,7 +374,8 @@ def plot_discovery_rates(sample_sizes, discovery_rates, part):
     plot of discovery rate against sample size
     """
 
-    plt.plot(sample_sizes, discovery_rates, marker = 'x', label='Discovery rate')
+    plt.plot(sample_sizes, discovery_rates, marker = 'x')
+    plt.plot(sample_sizes, np.linspace(90,90,len(sample_sizes)), color='red')
     plt.xlabel('Sample size')
     plt.ylabel('Discovery rate (%)')
     plt.legend()
