@@ -4,5 +4,9 @@ RUN mkdir -p S1_Coursework
 
 COPY . /S1_Coursework
 
-RUN cd S1_Coursework \
-    && conda env update -f environment.yml --name PrincDSCW
+WORKDIR /S1_Coursework
+
+RUN conda env update -f environment.yml --name PrincDSCW
+
+RUN echo "conda activate PrincDSCW" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]

@@ -70,4 +70,9 @@ Wikipedia.
 \newblock Rejection sampling.
 \newblock \url{https://en.wikipedia.org/wiki/Rejection_sampling}, Accessed: September 2021.
 
+\bibitem{Wilkls1938}
+S.~S. Wilks.
+\newblock The large-sample distribution of the likelihood ratio for testing composite hypotheses.
+\newblock {\em The Annals of Mathematical Statistics}, 9(1):60--62, 1938.
+
 \end{thebibliography}
