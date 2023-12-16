@@ -8,7 +8,7 @@ Inside this ```tmb76/``` directory, there are 3 sub-directories to explore. One 
 More importantly, there are an ```environment.yml``` file and a ```Dockerfile```, which uses it, which one is advised to use.
 
 ## How to run the code
-For permissions reasons, the ```Dockerfile``` is not set up to pull the repository direclty as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the ```Dockerfile```.
+For permissions reasons, the ```Dockerfile``` is not set up to pull the repository directly as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the ```Dockerfile```.
 All code can be run from the command line as follows:
 
 ```bash
