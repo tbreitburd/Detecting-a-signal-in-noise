@@ -126,6 +126,10 @@ alt_ndof = 1.76
 alt_pval = 1 - chi2.cdf(T, alt_ndof)
 print(alt_pval)
 
+# Initialise the list of discovery rates to store the results
+discovery_rates = []
+stdevs = []
+
 # Loop over the sample sizes
 for sample_size in sample_sizes:
 
@@ -175,20 +179,31 @@ for sample_size in sample_sizes:
         else:
             discovery.append(0)
 
-    discovery_rate = np.mean(discovery) * 100 # Calculate the discovery rate
-
+    discovery_rate = np.mean(discovery) * 100
+    discovery_rates.append(discovery_rate)
+    
+    # We bootstrap the discovery rate to get an estimate of the standard deviation
+    discovery_rates_bootstraps = []
+    for i in range(1000):
+        discovery_bootstrap = np.random.choice(discovery, size=1000, replace=True)
+        discovery_rate_bootstrap = np.mean(discovery_bootstrap) * 100
+        discovery_rates_bootstraps.append(discovery_rate_bootstrap)
+    
+    Stdev = np.std(discovery_rates_bootstraps, ddof=1)
+    
+    # We want to plot error bars of 3 standard deviations.
+    stdevs.append(3 * Stdev)
+    
     # Print the results
     print("Sample size: " + "{:e}".format(sample_size))
     print("Discovery rate: " + str(discovery_rate) + "%")
+    print("Standard deviation of d.r.: {} %".format(Stdev))
     print("---------------------------------------")
     print("---------------------------------------")
-
-    # Store the results
-    discovery_rates.append(discovery_rate)
-
-    # If the last three discovery rates are all above 90%, stop the loop
+    
+    # If the last 3 discovery rates are all above 90%, we stop the loop
     if all(rate > 90 for rate in discovery_rates[-3:]):
         break
 
 # Plot the results
-plot_discovery_rates(sample_sizes[:len(discovery_rates)], discovery_rates, 'g')
+plot_discovery_rates(sample_sizes[:len(discovery_rates)], discovery_rates, stdevs, 'g')
