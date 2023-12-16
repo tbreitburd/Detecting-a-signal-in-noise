@@ -44,10 +44,11 @@ def plot_pdf_g(pdf, mu_1, mu_2, sigma, lam, f1, f2, alpha, beta):
     pdf_true = pdf(x, mu_1, mu_2, sigma, lam, f1, f2)
 
     # Plot
-    plt.plot(x, signal_1,'--',color = 'r', label='First Signal, s(M; $\u03BC_{1}$, \u03C3)')
-    plt.plot(x, signal_2,'--',color = 'r', label='Second Signal, s(M; $\u03BC_{2}$, \u03C3)')
-    plt.plot(x, background_,'--', color = 'g', label='Background, b(M; \u03BB)')
+    plt.plot(x, f1*signal_1,'--',color = 'r', label='Scaled First Signal, s(M; $\u03BC_{1}$, \u03C3)')
+    plt.plot(x, f2*signal_2,'--',color = 'r', label='Scaled Second Signal, s(M; $\u03BC_{2}$, \u03C3)')
+    plt.plot(x, (1-f1-f2)*background_,'--', color = 'g', label='Scaled Background, b(M; \u03BB)')
     plt.plot(x, pdf_true, color = 'k', label='PDF')
+    plt.title('PDF of M, for the 2 signal model, for the true parameters')
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()

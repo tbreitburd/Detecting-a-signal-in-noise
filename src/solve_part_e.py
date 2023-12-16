@@ -162,6 +162,7 @@ plt.suptitle('Profile Likelihoods of Parameters, with 1-stdev Errors')
 plt.subplot(2,2,1)
 mi_bin.draw_profile('mu',  band = True)
 plt.ylabel('Profile Negative Log-Likelihood')
+plt.xticks([5.2785, 5.279, 5.2795, 5.28, 5.2805])
 plt.title(subplot_titles[0])
 plt.grid()
 

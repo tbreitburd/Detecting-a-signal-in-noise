@@ -66,7 +66,7 @@ for sample_size in sample_sizes:
 
         # Calculate the test statistic
         T = null_min - alt_min
-        alt_ndof = 1.76
+        alt_ndof = 3
         alt_pval = 1 - chi2.cdf(T, alt_ndof)
 
         p_vals.append(alt_pval)

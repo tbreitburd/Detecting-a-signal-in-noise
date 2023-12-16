@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.stats import chi2
 from iminuit import cost, Minuit
+import matplotlib.pyplot as plt
+import os
 from funcs import accept_reject, pdf_norm_efg, background_norm_efg, pdf_norm_g
 
 np.random.seed(75016)
@@ -49,7 +51,7 @@ for i in range(1000): # Run 1000 toys
     mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
     mi_null.limits['f'] = (0.01,1)
     mi_null.limits['lam'] = (0.00001, None)
-    mi_null.values['f'] = 0
+    mi_null.values['f'] = 0 
     mi_null.fixed['f'] = True
     H_null = mi_null.migrad()
 
@@ -80,7 +82,21 @@ ndof_fit = m.migrad()
 print("The number of degrees of freedom for part f (T-statistic distribution under null hypothesis):"
        + "{:.4f} ± {:.4f}".format(ndof_fit.values['df'], ndof_fit.errors['df']))
 
-
+plt.figure()
+plt.hist(T_, bins=50, density=True, label='T-statistic distribution', 
+         color='grey', range=(0,10))
+plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
+             color = 'red', label=r"$\chi^2$"+' distribution fitted (ndof = 1.76)')
+plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), 3),
+          color = 'green', label=r"$\chi^2$"+" distribution from Wilk's (ndof = 3)")
+plt.xlabel('T')
+plt.ylabel('Normalised Counts')
+plt.legend()
+proj_dir = os.getcwd()
+plots_dir = os.path.join(proj_dir, 'plots')
+os.makedirs(plots_dir, exist_ok=True)
+plot_dir = os.path.join(plots_dir, 'ndof_for_part_f.png')
+plt.savefig(plot_dir)
 
 # --------------------------------------- PART G ---------------------------------------
 
@@ -141,3 +157,19 @@ ndof_fit = m.migrad()
 
 print("The number of degrees of freedom for part g (T-statistic distribution under null hypothesis):"
        + "{:.4f} ± {:.4f}".format(ndof_fit.values['df'], ndof_fit.errors['df']))
+
+plt.figure()
+plt.hist(T_, bins=50, density=True, label='T-statistic distribution', 
+         color='grey', range=(0,10))
+plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
+          color = 'red', label=r"$\chi^2$"+' distribution fitted (ndof = 2.13)')
+plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), 2),
+          color = 'green', label=r"$\chi^2$"+" distribution from Wilk's (ndof = 2)")
+plt.xlabel('T')
+plt.ylabel('Normalised Counts')
+plt.legend()
+proj_dir = os.getcwd()
+plots_dir = os.path.join(proj_dir, 'plots')
+os.makedirs(plots_dir, exist_ok=True)
+plot_dir = os.path.join(plots_dir, 'ndof_for_part_g.png')
+plt.savefig(plot_dir)

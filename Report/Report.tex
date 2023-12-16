@@ -322,7 +322,7 @@ The \texttt{signal\_norm}, \texttt{background\_norm}, and \texttt{pdf\_norm} fun
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_pdf_d_comp.png}
     \captionsetup{margin=1.3cm}
-    \caption[width=0.2\pdfpagewidth]{Plot of the total p.d.f.\ of the model, signal, and background, normalised for $M\in{[5,5.6]}$.}
+    \caption[width=0.2\pdfpagewidth]{Plot of the total p.d.f.\ of the model, scaled signal and background, normalised for $M\in{[5,5.6]}$.}
 \end{figure}  
 
 This shows the impact of the $f$ weight, which considerably reduces the size of the signal component in the total p.d.f.. 
@@ -367,18 +367,18 @@ Furthermore, in the interest of performance, the \texttt{numba\-stats} library\c
     $\hat{f} = 0.1008 \pm 0.0017$
 \end{center}
 
-We can see that the minimisation performed well, with close estimates and relatively small uncertainties. And the following plot of the data and the fitted model was obtained:
+We can see that the minimisation performed well, with close estimates and relatively small uncertainties. Those uncertainties were obtained using a Hessian matrix. By taking the inverse of the Hessian matirx, the matrix of 2$^{nd}$ derivatives of the cost function for all free parameters, one can approximate the covariance matrix. Then, taking the diagonal elements gives an approximation of the variance of the estimates. Taking the squareroot gives the standard deviation. With those parameter estimates, the following plot of the data and the fitted model was obtained:
 
 \begin{figure}[tp]
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_pdf_e.png}
     \captionsetup{margin=1.3cm}
-    \caption[width=0.2\pdfpagewidth]{Plot of the binned data, with uncertainties being Poisson distributed ($sqrt{N}$) and the fitted signal, background, and total p.d.f. model from the estimated parameters}
+    \caption[width=0.2\pdfpagewidth]{Plots of the binned data, with uncertainties defined by the Poisson distribution ($\sqrt{N}$) and the fitted signal, background, and total p.d.f. model from the estimated parameters (top). And of the pull values for each bin, with their distribution histogram on the right (bottom).}
 \end{figure}
 
 \newpage
 
-The lower plots are plots of the pull: $pull = \frac{obs - pred}{\sqrt{N}}$, where $N$ is the bin counts. The pull plots are a good way to check that the uncertainties are sensible, and is also known as the student's t-distribution\cite{Haslwanter2022}.
+The lower plots are plots of the pull: $pull = \frac{obs - pred}{\sqrt{N}}$, where $N$ is the bin counts. In other words, they are the errors weighted by the uncertainties. The pull plots are a good way to check that the uncertainties are sensible, and is also known as the student's t-distribution\cite{Haslwanter2022}.
 
 
 \section*{Section B}
@@ -420,9 +420,19 @@ Doing so, 2 hypothesis are being fitted to the samples, and we can obtain the mi
 
 The reason this test is used is backed up by the Neyman-Pearson Lemma, which asserts that a test statistic of this form has the strongest statistical power, for any test size. In other words, it maximises the critical region, under the test-statistic's distribution curve, whose area is the value for which a decision regarding the alternate hypothesis can be made\cite[p. 170]{Wass}. Now, from Wilk's theorem, this test-statistic will be approximately distributed as a $\chi^{2}$ with number of degrees of freedom (DoF), the difference in the number of free parameters under the alternate and the null hypotheses\cite{Wilkls1938}. Wilk's theorem applies here because the hypothesis test has been set up so that the null is a subset case of the alternate\cite{huelsenbeck1997phylogeny}.  
 
-For a more robust result, a side simulation was run, similar to (e), but with a dataset generated from the null hypothesis, i.e.\ $f=0$. And bootstrapping from it, a distribution of the test-statistic under the null hypothesis was obtained. Using \texttt{iminuit}, and defining the cost function as the unbinned NLL of the $\chi^{2}$ distribution p.d.f., we fit for the number of DoF parameter for that observed distribution\cite{iminuitmethod}. For (f), we obtained a value of 1.76. This is reasonably similar to the Wilk's theorem's expected value of $4 - 3 = 1$ (cf. \texttt{ndof\_for\_art\_f\_g.py}).  
+For a more robust result, a side simulation was run, similar to (e), but with a dataset generated from the null hypothesis, i.e.\ $f=0$. And bootstrapping from it, a distribution of the test-statistic under the null hypothesis was obtained. Using \texttt{iminuit}, and defining the cost function as the unbinned NLL of the $\chi^{2}$ distribution p.d.f., we fit for the number of DoF parameter for that observed distribution\cite{iminuitmethod}. For (f), we obtained a value of 1.76. This is different from Wilk's theorem's expected value of $4 - 1 = 3$ (cf. \texttt{ndof\_for\_art\_f\_g.py}).
 
-With the number of DoF, the p-value can be computed as 1 minus the area under the $\chi^{2}$ distribution curve, from $-\inf$ to the test-statistic. This is done using the \texttt{scipy.stats.chi2.cdf} function, going back to the definition of the c.d.f.\cite[pp. 20-23]{Wass}\cite{scipy-stats}. Then, applying the discovery threshold, the number of discoveries is counted and the frequency of discovery is computed.
+\begin{figure}[tp]
+    \centering
+    \includegraphics[width=\textwidth]{../Plots/ndof_for_part_f.png}
+    \captionsetup{margin=1.3cm}
+    \caption[width=0.2\pdfpagewidth]{Plot of the fitted $\chi^{2}$ distribution vs Wilk's theorem over the test-statistic histogram under the null hypothesis, for part (f).}
+\end{figure}
+
+Indeed, the fitted $\chi^{2}$ distribution fits much worse than using the Wilk's theorem's expected value. Thus, we will use the Wilk's theorem's expected value of number of DoF for part (f).
+With the number of DoF, the p-value can be computed as 1 minus the area under the $\chi^{2}$ distribution curve, from $-\inf$ to the test-statistic. This is done using the \texttt{scipy.stats.chi2.cdf} function, going back to the definition of the c.d.f.\cite[pp. 20-23]{Wass}\cite{scipy-stats}. Then, applying the discovery threshold, the number of discoveries is counted and the frequency of discovery is computed.  
+
+To then get the uncertainties of those discovery rates, samples are bootstrapped from the of discoveries, a list of 1's if there was a discovery, 0's otherwise. Using this, the discovery rate is computed for each of those toys. From the resulting distribution of discovery rates, the standard deviation is calculated. We thus obtain confidence intervals for the discovery rate.
 
 \vspace*{1\baselineskip}
 \underline{For (g):} 
@@ -448,7 +458,16 @@ The null hypothesis is now that there is only one signal on top of the backgroun
     $f_{2} = 0.1$
 \end{center}
 
-The same test statistic is used, and the same method is applied. The number of DoF was now found to be 2.13, closer to the Wilk's theorem's expected value of $6 - 4 = 2$.
+The same test statistic is used, and the same method is applied. The number of DoF was now found to be 2.13, closer to the Wilk's theorem's expected value of $6 - 4 = 2$. 
+
+\begin{figure}[tp]
+    \centering
+    \includegraphics[width=\textwidth]{../Plots/ndof_for_part_g.png}
+    \captionsetup{margin=1.3cm}
+    \caption[width=0.2\pdfpagewidth]{Plot of the fitted $\chi^{2}$ distribution vs Wilk's theorem over the test-statistic histogram under the null hypothesis, for part (g).}
+\end{figure}
+
+In this case, the $\chi^{2}$ distribution for the fitted number of DoF seems to better fit the data than for the Wilk's theorem's expected value, so we will use the fitted number of DoF for part (g).
 
 \subsubsection*{Results}
 
@@ -460,10 +479,10 @@ The same test statistic is used, and the same method is applied. The number of D
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_f.png}
     \captionsetup{margin=1.3cm}
-    \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line). The red line shows the 90\% goal}
+    \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line), with error bars of 3 standard deviations. The red line shows the 90\% goal}
 \end{figure}
 
-The plot shows that the discovery rate increases with the sample size, as expected. The simulation stops after it founds 3 sample sizes that have discovery rates above 90\%. Here, the minimum sample size appear to be around 700 samples. Considering the size of the signal component (Figure 2), this is a reasonable result.
+The plot shows that the discovery rate increases with the sample size, as expected. The simulation stops after it founds 3 sample sizes that have discovery rates above 90\%. Here, the minimum sample size appear to be around 800 samples, maybe 750. The error bars are set to represent 3 standard deviations from the mean. Here, it is clear that for 800 samples, there is a large proportion of the discovery rate distribution above the 90\% threshold.
 
 \vspace*{1\baselineskip}
 
@@ -478,7 +497,7 @@ The plot shows that the discovery rate increases with the sample size, as expect
     \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line). The red line shows the 90\% goal}
 \end{figure}
 
-For this simulation, the discovery rate stays low for much longer than in (f). Comparing the 2 simulations, it makes sense that discerning 2 signals is much harder to do than simply detect that there is one. Especially when looking at a plot of the 2$^{nd}$ simulation's p.d.f.:
+For this simulation, the discovery rate stays low for much longer than in (f). Comparing the 2 simulations, discerning 2 signals may be much harder to do than simply detect that there is one. This is seen especially when looking at a plot of the 2$^{nd}$ simulation's p.d.f.:
 \newpage
 \begin{figure}[tp]
     \centering
@@ -499,16 +518,20 @@ Hence, the simulation shows that the minimum sample size for which the signal is
 
 \section*{Appendix}
 
+\subsection*{Use of generative AI}
+Copilot's autocompletion feature was used in coding the project, when writing docstrings for the functions, and when covering repetitive parts of the code, like part (f) and (g)'s hypothesis testing.
+ChatGPT was used to help in debugging the code, by providing the tracebacks when an error was difficult to understand.
+
 \subsection*{README file}
 
 \subsubsection*{Description} 
-This repositery contains the code and written report for the S1 PDS coursework. The aim was to demonstrate applications of statistics to..
+This repositery contains the code and written report for the S1 PDS coursework. The aim was to demonstrate the applications of statistical methods, including coding them.
 
 \subsubsection*{Contents}  
-Inside this \texttt{tmb76/} directory, there are 3 sub-directories to explore. One is the code directory (\texttt{src/}), which contains all the code used to generate the results and plots. The other is the plots directory (\texttt{Plots/}), which contains all the plots generated by the code. An important note is that the plots direcotry will be created by the code if it does not exist yet. So if there is no plots direcotry in the repository yet, running all the code should lead to creating and filling one. The last one is the report directory, which contains the \LaTeX\ file for the report, as well as the pdf version of it. More importantly, there are an \texttt{environment.yml} file and a \texttt{Dockerfile}, which uses it, which one is advised to use.
+Inside this \texttt{tmb76/} directory, there are 3 sub-directories to explore. One is the code directory (\texttt{src/}), which contains all the code used to generate the results and plots. The other is the plots directory (\texttt{Plots/}), which contains all the plots generated by the code. An important note is that the plots direcotry will be created by the code if it does not exist yet. So if there is no plots direcotry in the repository yet, running all the code should lead to creating and filling one. The last one is the report directory, which contains the \LaTeX\ file for the report, as well as the pdf version of it. More importantly, there are an \texttt{environment.yml} file and a \texttt{Dockerfile}, which uses it, and one is advised to use.
 
 \subsubsection*{How to run the code}
-For permissions reasons, the \texttt{Dockerfile} is not set up to pull the repository direclty as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the \texttt{Dockerfile}.
+For permissions reasons, the \texttt{Dockerfile} is not set up to pull the repository directly as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the \texttt{Dockerfile}.
 All code can be run from the command line as follows:
 
 \vspace*{1\baselineskip}
@@ -527,13 +550,7 @@ Additionally, there is a \texttt{ndof\_for\_part\_f\_g.py} file which covers det
 
 Relevant outputs will be printed by the code to the terminal, and any plots generated will be saved to a \texttt{Plots/} directory, that will get created if it doesn't exist yet.
 
-This can be done within a Docker container, by building an image from the \texttt{Dockerfile}, and once in a running container, switching to the created environment, and the project's directory (\texttt{S1\_Coursework}):
-
-\vspace*{1\baselineskip}
-\begin{lstlisting}[language=bash, caption={Changing to the correct directory and environment, in the Docker container}]
-    $ conda activate PrincDSCW
-    $ cd S1_Coursework
-\end{lstlisting}
+This can all be done within a Docker container, by building an image from the \texttt{Dockerfile}, and running a container from it. 
 
 From there, all files can be run in the same manner as above.
 
