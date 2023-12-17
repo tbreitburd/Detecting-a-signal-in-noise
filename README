@@ -11,7 +11,7 @@ More importantly, there are an ```environment.yml``` file and a ```Dockerfile```
 For permissions reasons, the ```Dockerfile``` is not set up to pull the repository directly as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the ```Dockerfile```, using the following command:
 
 ```bash
-$ docker build -t pdscw
+$ docker build -t pdscw .
 $ docker run -ti --name=pdscw_container pdscw
 ```
 
