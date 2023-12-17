@@ -8,8 +8,26 @@ Inside this ```tmb76/``` directory, there are 3 sub-directories to explore. One 
 More importantly, there are an ```environment.yml``` file and a ```Dockerfile```, which uses it, and one is advised to use.
 
 ## How to run the code
-For permissions reasons, the ```Dockerfile``` is not set up to pull the repository directly as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the ```Dockerfile```.
-All code can be run from the command line as follows:
+For permissions reasons, the ```Dockerfile``` is not set up to pull the repository directly as it builds the image. Therefore, one must first pull this repository to their local machine and then are free to build the Docker image from the ```Dockerfile```, using the following command:
+
+```bash
+$ docker build -t pdscw
+$ docker run -ti --name=pdscw_container pdscw
+```
+
+The given image name is not a requirement, it can be set to any valid name. The 2nd line does not use ```--rm```, which means the container will not be removed once exited. This is so that once the code is run on the container the plots directory can be copied back to the local machine using this command after using ```exit``` to exit the container:
+
+```bash
+$ docker cp pdscw_container:/S1_Coursework/plots ./plots
+```
+
+This means the container can and should be removed after the plots have been copied:
+
+```bash
+$ docker rm pdscw_container
+```
+
+All code can be run from the command line (in the container) as follows:
 
 ```bash
 $ python src/solve_part_*.py

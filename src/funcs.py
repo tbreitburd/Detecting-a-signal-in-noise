@@ -374,7 +374,7 @@ def plot_discovery_rates(sample_sizes, discovery_rates, stdevs, part):
     plot of discovery rate against sample size
     """
     
-    
+    plt.figure(figsize=(10,8))
     plt.errorbar(sample_sizes, discovery_rates, yerr=stdevs, linestyle = 'None', 
                  capsize = 3, label = '3$\sigma$ uncertainty', color = 'k')
     plt.plot(sample_sizes, discovery_rates, marker = 'x', color = 'g')
