@@ -31,7 +31,7 @@ def plot_pdf_g(pdf, mu_1, mu_2, sigma, lam, f1, f2, alpha, beta):
     """
 
     # Define x-axis
-    x = np.linspace(alpha, beta, 1000)
+    x = np.linspace(alpha, beta-0.001, 1000)
 
     # Define signal component
     signal_1 = signal_norm(x, mu_1, sigma, alpha, beta)
@@ -43,15 +43,19 @@ def plot_pdf_g(pdf, mu_1, mu_2, sigma, lam, f1, f2, alpha, beta):
     # Define pdf
     pdf_true = pdf(x, mu_1, mu_2, sigma, lam, f1, f2)
 
+    plt.figure(figsize=(10,8))
+
     # Plot
     plt.plot(x, f1*signal_1,'--',color = 'r', label='Scaled First Signal, s(M; $\u03BC_{1}$, \u03C3)')
-    plt.plot(x, f2*signal_2,'--',color = 'r', label='Scaled Second Signal, s(M; $\u03BC_{2}$, \u03C3)')
+    plt.plot(x, f2*signal_2,'--',color = 'b', label='Scaled Second Signal, s(M; $\u03BC_{2}$, \u03C3)')
     plt.plot(x, (1-f1-f2)*background_,'--', color = 'g', label='Scaled Background, b(M; \u03BB)')
     plt.plot(x, pdf_true, color = 'k', label='PDF')
     plt.title('PDF of M, for the 2 signal model, for the true parameters')
+    plt.xlim(alpha, beta)
     plt.xlabel('M')
     plt.ylabel('Probability density')
     plt.legend()
+    plt.grid()
     proj_dir = os.getcwd()
     plots_dir = os.path.join(proj_dir, 'plots')
     os.makedirs(plots_dir, exist_ok=True)
@@ -96,10 +100,15 @@ nll = cost.UnbinnedNLL(M, pdf_norm_g)
         
 # Run the fit for the null hypothesis, just 1 signal component
 mi_null = Minuit(nll,  f1 = 0.2, f2 = 0.1, lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-mi_null.limits['f1'] = (0.01,1)
+mi_null.limits['f1'] = (0.00001,1)
 mi_null.limits['lam'] = (0.00001, None)
+# Fix the value of f2 to 0, essentially creating the null hypothesis model
 mi_null.values['f2'] = 0
 mi_null.fixed['f2'] = True
+# Fix mu_2 as well, otherwise it floats and causes problems, but since it is
+# irrelevant for the null hypothesis, we can fix it
+mi_null.values['mu_2'] = 5.4
+mi_null.fixed['mu_2'] = True
 H_null = mi_null.migrad()
 
 null_min = mi_null.fval # Store the minimum of the fit
@@ -107,8 +116,8 @@ print(H_null)
 
 # Run the fit for the alternate hypothesis, 2 signal components
 mi_alt = Minuit(nll,  f1 = 0.2, f2 = 0.1,  lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-mi_null.limits['f1'] = (0.01,1)
-mi_null.limits['f2'] = (0.01,1)
+mi_alt.limits['f1'] = (0.00001,1)
+mi_alt.limits['f2'] = (0.00001,1)
 mi_alt.limits['lam'] = (0.00001, None)
 mi_alt.limits['sigma'] = (0.00001, None)
 mi_alt.limits['mu_1'] = (5,5.6)
@@ -121,7 +130,7 @@ print(H_alt)
 # Calculate the test statistic
 T = null_min - alt_min
 # Set the number of degrees of freedom
-alt_ndof = 1.76
+alt_ndof = 2.06 # see ndof_for_part_f_g.py
 
 # Calculate the p-value
 alt_pval = 1 - chi2.cdf(T, alt_ndof)
@@ -146,30 +155,43 @@ for sample_size in sample_sizes:
         
         # Run the fit for the null hypothesis
         mi_null = Minuit(nll,  f1 = 0.2, f2 = 0.1, lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-        mi_null.limits['f1'] = (0.01,1)
+
+        # We can set some physical limits
+        mi_null.limits['f1'] = (0.00001,1)
         mi_null.limits['lam'] = (0.00001, None)
+
+        # Fix the value of f2 to 0, essentially creating the null hypothesis model
         mi_null.values['f2'] = 0
         mi_null.fixed['f2'] = True
+        mi_null.values['mu_2'] = 5.4
+        mi_null.fixed['mu_2'] = True
+
         H_null = mi_null.migrad()
 
         null_min = mi_null.fval # Store the minimum of the fit
     
+
+
         # Run the fit for the alternate hypothesis
         mi_alt = Minuit(nll,  f1 = 0.2, f2 = 0.1,  lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-        mi_alt.limits['f1'] = (0.01,1)
-        mi_alt.limits['f2'] = (0.01,1)
+        mi_alt.limits['f1'] = (0.0001,1)
+        mi_alt.limits['f2'] = (0.0001,1)
         mi_alt.limits['lam'] = (0.00001, None)
         mi_alt.limits['sigma'] = (0.00001, None)
         mi_alt.limits['mu_1'] = (5,5.6)
         mi_alt.limits['mu_2'] = (5,5.6)
+
         H_alt = mi_alt.migrad()
 
         alt_min = mi_alt.fval # Store the minimum of the fit
 
         # Calculate the test statistic
         T = null_min - alt_min
+
         # Set the number of degrees of freedom
-        alt_ndof = 2.13 # the number of degrees of freedom for the test statistic distribution under the null hypothesis
+        alt_ndof = 2.13 # the number of degrees of freedom for the test statistic 
+                        # distribution under the null hypothesis
+                        # see ndof_for_part_f_g.py
 
         # Calculate the p-value
         alt_pval = 1 - chi2.cdf(T, alt_ndof)
@@ -190,6 +212,7 @@ for sample_size in sample_sizes:
         discovery_rate_bootstrap = np.mean(discovery_bootstrap) * 100
         discovery_rates_bootstraps.append(discovery_rate_bootstrap)
     
+    # Calculate the standard deviation of the discovery rate from its bootstrapped distribution
     Stdev = np.std(discovery_rates_bootstraps, ddof=1)
     
     # We want to plot error bars of 3 standard deviations.

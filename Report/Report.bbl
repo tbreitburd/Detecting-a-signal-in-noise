@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{PhysRevD.57.3873}
+Gary~J. Feldman and Robert~D. Cousins.
+\newblock Unified approach to the classical statistical analysis of small signals.
+\newblock {\em Phys. Rev. D}, 57:3873--3889, Apr 1998.
+
 \bibitem{python-random}
 Python~Software Foundation.
 \newblock random.uniform.

@@ -5,14 +5,16 @@ import matplotlib.pyplot as plt
 from funcs import accept_reject, pdf_norm_efg, plot_discovery_rates
 import os
 
-
+# Set the random seed
 np.random.seed(75016)
 
+# Define true parameters
 mu = 5.28
 sigma = 0.018
 lam = 0.5
 f = 0.1
 
+# Define the r.v. domain limits
 alpha = 5
 beta = 5.6
 
@@ -20,7 +22,7 @@ beta = 5.6
 pdf_true = lambda x: pdf_norm_efg(x, mu, sigma, lam, f)
 sample_sizes = [100, 200, 300, 400, 500, 550, 600, 650, 700, 800, 900, 1000, 2000, 3000, 4000, 5000]
 
-
+# Initialise the list of discovery rates to store the results
 discovery_rates = []
 stdevs = []
 
@@ -30,13 +32,13 @@ for sample_size in sample_sizes:
 
     discovery = []
     p_vals = []
-    #M_bootstrap = np.zeros((10, sample_size))
 
-    for i in range(1000):
+    for i in range(1000):  # Run 1000 toys
 
+        # Bootstrap the sample of desired size from the large sample
         M_bootstrap = np.random.choice(M, size=sample_size, replace=True)
 
-
+        # Define the cost function, here the unbinned Negative Log Likelihood
         nll = cost.UnbinnedNLL(M_bootstrap, pdf_norm_efg)
         
         # Run the fit for the null hypothesis
@@ -44,7 +46,9 @@ for sample_size in sample_sizes:
         mi_null.limits['f'] = (0,1)
         mi_null.limits['lam'] = (0.01,1)
         mi_null.limits['sigma'] = (0,20)
-        mi_null.limits['mu'] = (5,5.6)
+        mi_null.limits['mu'] = (5,5.6) # This doesn't matter, since f is fixed to 0
+                                       # but it causes invalid operations if it is allowed 
+                                        # to float completely freely
         mi_null.values['f'] = 0
         mi_null.fixed['f'] = True
         H_null = mi_null.migrad()
@@ -66,7 +70,7 @@ for sample_size in sample_sizes:
 
         # Calculate the test statistic
         T = null_min - alt_min
-        alt_ndof = 3
+        alt_ndof = 3 # from Wilk's theorem
         alt_pval = 1 - chi2.cdf(T, alt_ndof)
 
         p_vals.append(alt_pval)
@@ -87,6 +91,8 @@ for sample_size in sample_sizes:
         discovery_rate_bootstrap = np.mean(discovery_bootstrap) * 100
         discovery_rates_bootstraps.append(discovery_rate_bootstrap)
     
+    # Calculate the standard deviation of the discovery rate,
+    # correcting for bias
     Stdev = np.std(discovery_rates_bootstraps, ddof=1)
     
     # We want to plot error bars of 3 standard deviations.

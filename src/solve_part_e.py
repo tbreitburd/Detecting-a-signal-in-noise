@@ -28,7 +28,7 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     """
 
     # Define x-axis
-    x = np.linspace(alpha, beta, 200)
+    x = np.linspace(alpha, beta-0.001, 200)
 
     # Define signal component
     signal_ = signal_norm_efg(x, mu_hat, sigma_hat)
@@ -68,6 +68,7 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     ax[0,0].plot(x, f_hat * signal_ * N * bin_width[0],'--',color = 'r', label='f x Signal, s(M; \u03BC, \u03C3)')
     ax[0,0].plot(x, (1 - f_hat) * background_ * N * bin_width[0],'--', color = 'g', label='Background, b(M; \u03BB)')
     ax[0,0].plot(x, pdf_vals * N * bin_width[0],'--', color = 'k', label='PDF')
+    ax[0,0].set_xlim(alpha, beta)
     ax[0,0].legend(loc='upper right')
     ax[0,0].grid()
     ax[0,0].set_ylabel('Counts')
@@ -79,6 +80,7 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     ax[1,0].plot(x, np.zeros_like(x))
     ax[1,0].set_xlabel('$M$')
     ax[1,0].set_ylabel('Pull')
+    ax[1,0].set_xlim(alpha, beta)
 
     # Pull distribution figure
     ax[0,1].set_visible(False)

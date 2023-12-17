@@ -218,7 +218,7 @@ This then means that $J = \pm 1$ but since $s(M;\mu,\sigma) > 0 \forall M \in [-
 We want to find an expression of $p(M;\vec{\theta})$ such that it is normalised between $\alpha$ and $\beta$. Now because the signal fraction $f$ is such that:
 
 \begin{equation}
-    \frac{s(M;\mu,\sigma)}{b(M;\lambda)} = \frac{f}{1-f}
+    \frac{f \times s(M;\mu,\sigma)}{(1 - f)\times b(M;\lambda)} = \frac{f}{1-f}
 \end{equation}
 
 This means that we need to normalise the signal and background components separately. This gives:
@@ -279,7 +279,7 @@ Finally, this gives the total p.d.f.\ of the model as:
 
 \subsection*{(c)}
 
-In this question, we check that the integral of the p.d.f.\ between $\alpha$ and $\beta$ does equal unity. For this specific case, the \texttt{scipy.integrate} library \cite{scipy-integrate} is used to numerically integrate the component-wise normalised p.d.f.\ as described in equation (4). Though $N_{s}$ and $N_{b}$, are computed using the \texttt{scipy.integrate} library \cite{scipy-integrate}, like in (5) and (6). The components are computed using \texttt{scipy.stats} library's \texttt{norm.pdf} and \texttt{expon.pdf} methods \cite{scipy-stats} (cf.\ \texttt{funcs.py} file, \texttt{pdf\_norm} function). Then, the weighted sum of the two is computed. Finally, that p.d.f.\ is integrated from $\alpha$ to $\beta$, with randomly generated $\vec{\theta}$ parameters, using \texttt{random.uniform} \cite{python-random}. The results are shown in the table below:
+In this question, we check that the integral of the p.d.f.\ between $\alpha$ and $\beta$ does equal unity. For this specific case, the \texttt{scipy.integrate} library \cite{scipy-integrate} is used to numerically integrate the component-wise normalised p.d.f.\ as described in equation (4). Though $N_{s}$ and $N_{b}$, are computed using the \texttt{scipy.integrate} library \cite{scipy-integrate}, like in (5) and (6). The components are computed using \texttt{scipy.stats} library's \texttt{norm.pdf} and \texttt{expon.pdf} methods \cite{scipy-stats} (cf.\ \texttt{funcs.py} file; \texttt{pdf\_norm}, \texttt{signal\_norm}, \texttt{background\_norm} function). Then, the weighted sum of the two is computed. Finally, that p.d.f.\ is integrated from $\alpha$ to $\beta$, with randomly generated $\vec{\theta}$ parameters, using \texttt{random.uniform} \cite{python-random}. The results are shown in the table below:
 
 \begin{center}
     \begin{table}[htbp]
@@ -325,11 +325,11 @@ The \texttt{signal\_norm}, \texttt{background\_norm}, and \texttt{pdf\_norm} fun
     \caption[width=0.2\pdfpagewidth]{Plot of the total p.d.f.\ of the model, scaled signal and background, normalised for $M\in{[5,5.6]}$.}
 \end{figure}  
 
-This shows the impact of the $f$ weight, which considerably reduces the size of the signal component in the total p.d.f.. 
+It is worth keeping in mind the importance of the $f$ weight here. Figure 1 shows the scaled signal, which here means scaling by 0.1. In other words the signal component would be 10 times larger than this if $f=1$.
 
 \subsection*{(e)}
 
-The ``true'' p.d.f., signal and background component are now known and have been visualised. The context is now to generate a dataset from this ``true'' p.d.f., and to assume this is an observed sample obtained in an experiment. From this sample, the goal is now to try and estimate these ``true'' parameters, using a chosen estimation method.  
+The ``true'' p.d.f., signal and background component are now known and have been visualised (Fig. 1). The context is now to generate a dataset from this ``true'' p.d.f., and to assume this is an observed sample obtained in an experiment. From this sample, the goal is now to try and estimate these ``true'' parameters, using a chosen estimation method.  
 
 To generate the sample, an accept-reject method was used\cite{wiki-rejection-sampling}. The accept-reject method requires us to know the p.d.f.\ function over the $M$ domain, and the maximum value of the p.d.f.\ in the $M$ domain, $y_{\max}$. Uniformly random values of $M$ between $\alpha$ and $\beta$ are generated, using \texttt{random.uniform}\cite{python-random}. Then, for each of these values, many uniform random values of $y$ are generated between 0 and $y_{\max}$. If these generated $y$'s are such that $y \leq p(M;\vec{\theta})$ for the generated $M$ then the \textbf{$\mathbf{M}$ value} is accepted and added to the sample. This is repeated until the sample size is reached (cf.\ \texttt{funcs.py} file, \texttt{accept\_reject} function).  
 
@@ -378,7 +378,7 @@ We can see that the minimisation performed well, with close estimates and relati
 
 \newpage
 
-The lower plots are plots of the pull: $pull = \frac{obs - pred}{\sqrt{N}}$, where $N$ is the bin counts. In other words, they are the errors weighted by the uncertainties. The pull plots are a good way to check that the uncertainties are sensible, and is also known as the student's t-distribution\cite{Haslwanter2022}.
+The lower plots are plots of the pull: $pull = \frac{obs - pred}{\sqrt{N}}$, where $N$ is the bin counts. In other words, they are the errors weighted by the uncertainties. The pull plots are a good way to check that the uncertainties are sensible, and is also known as the student's t-distribution\cite{Haslwanter2022}. Figure 2 shows an agreement between the original data and the fitted model, with the pull values being approximately normally distributed around 0, as expected. Comparing with Figure 1, we also see that our generated data is sensible and not entirely different to the ``true'' model.
 
 
 \section*{Section B}
@@ -420,19 +420,20 @@ Doing so, 2 hypothesis are being fitted to the samples, and we can obtain the mi
 
 The reason this test is used is backed up by the Neyman-Pearson Lemma, which asserts that a test statistic of this form has the strongest statistical power, for any test size. In other words, it maximises the critical region, under the test-statistic's distribution curve, whose area is the value for which a decision regarding the alternate hypothesis can be made\cite[p. 170]{Wass}. Now, from Wilk's theorem, this test-statistic will be approximately distributed as a $\chi^{2}$ with number of degrees of freedom (DoF), the difference in the number of free parameters under the alternate and the null hypotheses\cite{Wilkls1938}. Wilk's theorem applies here because the hypothesis test has been set up so that the null is a subset case of the alternate\cite{huelsenbeck1997phylogeny}.  
 
-For a more robust result, a side simulation was run, similar to (e), but with a dataset generated from the null hypothesis, i.e.\ $f=0$. And bootstrapping from it, a distribution of the test-statistic under the null hypothesis was obtained. Using \texttt{iminuit}, and defining the cost function as the unbinned NLL of the $\chi^{2}$ distribution p.d.f., we fit for the number of DoF parameter for that observed distribution\cite{iminuitmethod}. For (f), we obtained a value of 1.76. This is different from Wilk's theorem's expected value of $4 - 1 = 3$ (cf. \texttt{ndof\_for\_art\_f\_g.py}).
+To give more confidence to this result, a side simulation was run, to fit the T-statistic distribution with a $\chi^{2}$ and determine the number of DoF. Similar to (e), but with a dataset generated from the null hypothesis, i.e.\ $f=0$. By bootstrapping from it, a distribution of the test-statistic under the null hypothesis is obtained. Using \texttt{iminuit}, and defining the cost function as the unbinned NLL of the $\chi^{2}$ distribution p.d.f., we fit for the number of DoF parameter for that observed distribution\cite{iminuitmethod}. It is worth to note that this simulation encountered a number of issues, including problems with non-valid operations due to \texttt{iminuit} sometimes returning very small values (e.g. $\sigma$), causing \texttt{RunTimeWarnings}. So it is important we compare the Wilk's expected number of DoF and the fitted one. For (f), we obtained a value of 1.95. This is different from Wilk's theorem's expected value of $4 - 1 = 3$ (cf. \texttt{ndof\_for\_art\_f\_g.py}).
 
-\begin{figure}[tp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{../Plots/ndof_for_part_f.png}
     \captionsetup{margin=1.3cm}
     \caption[width=0.2\pdfpagewidth]{Plot of the fitted $\chi^{2}$ distribution vs Wilk's theorem over the test-statistic histogram under the null hypothesis, for part (f).}
 \end{figure}
+\newpage
+Indeed, the fitted $\chi^{2}$ distribution fits much worse than using the Wilk's theorem's expected value. Thus, we will use the Wilk's theorem's expected value of number of DoF for part (f).  
 
-Indeed, the fitted $\chi^{2}$ distribution fits much worse than using the Wilk's theorem's expected value. Thus, we will use the Wilk's theorem's expected value of number of DoF for part (f).
 With the number of DoF, the p-value can be computed as 1 minus the area under the $\chi^{2}$ distribution curve, from $-\inf$ to the test-statistic. This is done using the \texttt{scipy.stats.chi2.cdf} function, going back to the definition of the c.d.f.\cite[pp. 20-23]{Wass}\cite{scipy-stats}. Then, applying the discovery threshold, the number of discoveries is counted and the frequency of discovery is computed.  
 
-To then get the uncertainties of those discovery rates, samples are bootstrapped from the of discoveries, a list of 1's if there was a discovery, 0's otherwise. Using this, the discovery rate is computed for each of those toys. From the resulting distribution of discovery rates, the standard deviation is calculated. We thus obtain confidence intervals for the discovery rate.
+From our bootstrapping, we obtained a list of disoveries, with 1's if there was a discovery, 0's otherwise. We can further bootstrap from these, to obtain multiple ``possible'' discovery rates for a given sample size. From the resulting distribution of discovery rates, the standard deviation is calculated. We can thus obtain some confidence intervals for the discovery rate.
 
 \vspace*{1\baselineskip}
 \underline{For (g):} 
@@ -460,46 +461,46 @@ The null hypothesis is now that there is only one signal on top of the backgroun
 
 The same test statistic is used, and the same method is applied. The number of DoF was now found to be 2.13, closer to the Wilk's theorem's expected value of $6 - 4 = 2$. 
 
-\begin{figure}[tp]
+\begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{../Plots/ndof_for_part_g.png}
     \captionsetup{margin=1.3cm}
     \caption[width=0.2\pdfpagewidth]{Plot of the fitted $\chi^{2}$ distribution vs Wilk's theorem over the test-statistic histogram under the null hypothesis, for part (g).}
 \end{figure}
-
-In this case, the $\chi^{2}$ distribution for the fitted number of DoF seems to better fit the data than for the Wilk's theorem's expected value, so we will use the fitted number of DoF for part (g).
+\newpage
+In this case, the $\chi^{2}$ distribution for the fitted number of DoF fits just as well as for the Wilk's theorem's expected value, so we will use the fitted number of DoF for part (g).
 
 \subsubsection*{Results}
 
 \underline{For (f):}
 
-\vspace*{1\baselineskip}
-
-\begin{figure}[tp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_f.png}
     \captionsetup{margin=1.3cm}
     \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line), with error bars of 3 standard deviations. The red line shows the 90\% goal}
 \end{figure}
-
-The plot shows that the discovery rate increases with the sample size, as expected. The simulation stops after it founds 3 sample sizes that have discovery rates above 90\%. Here, the minimum sample size appear to be around 800 samples, maybe 750. The error bars are set to represent 3 standard deviations from the mean. Here, it is clear that for 800 samples, there is a large proportion of the discovery rate distribution above the 90\% threshold.
+\vspace{1\baselineskip}
+Figure 5 shows that the discovery rate increases with the sample size, as expected. The simulation stops after it finds 3 sample sizes that have discovery rates above 90\%. Here, the minimum sample size appear to be around 800 samples, maybe 750. The error bars are set to represent 3 standard deviations from the mean. Here, it is clear that for 800 samples, there is a large proportion of the discovery rate distribution above the 90\% threshold. One note to make is that the intervals, when near the boundaries at 0 and 100\%, do cross over for 3 standard deviations. This means that the coverage of those intervals are not to be taken at face value. In reality, since no discovery rate could possibly be below 0\% or above 100\%, the discovery rate distributions are likely assymetric in those cases, and the uncertainties should as well. For these cases, other methods of confidence interval calculation may be used for accurate coverage, such as the Feldmann-Cousins method\cite{PhysRevD.57.3873}. 
 
 \vspace*{1\baselineskip}
 
 \underline{For (g):}
 
 \vspace*{1\baselineskip}
+For this simulation, seen in Figure 6, the discovery rate stays low for much longer than in (f). And the minimum sample size is much larger, at around 3500 samples.
 
-\begin{figure}[tp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_g.png}
     \captionsetup{margin=1.3cm}
-    \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line). The red line shows the 90\% goal}
+    \caption[width=0.2\pdfpagewidth]{Plot of the discovery rate as a function of the sample size (blue line), with error bars at 3 $\sigma$. The red line shows the 90\% goal}
 \end{figure}
 
-For this simulation, the discovery rate stays low for much longer than in (f). Comparing the 2 simulations, discerning 2 signals may be much harder to do than simply detect that there is one. This is seen especially when looking at a plot of the 2$^{nd}$ simulation's p.d.f.:
 \newpage
-\begin{figure}[tp]
+Comparing the 2 simulations, discerning 2 signals may be much harder to do than simply detect that there is one. This is seen especially when looking at a plot of the 2$^{nd}$ simulation's p.d.f.
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{../Plots/plot_pdf_g.png}
     \captionsetup{margin=1.3cm}
@@ -507,9 +508,9 @@ For this simulation, the discovery rate stays low for much longer than in (f). C
 \end{figure}
 
 One can see the 2nd signal is much smaller than the first, making it harder to detect for smaller sample sizes. In other words, for smaller samples, the 2nd signal is more likely to be hidden in the background, or the 2 signals can be confused as one wider signal. Overall, since the discovery threshold is quite high, it is likely the p-values obtained are still significant enough to reject the null hypothesis for smaller samples. 
-
+\newpage
 \subsubsection*{Discussion}
-Hence, the simulation shows that the minimum sample size for which the signal is discovered at least 90\% of the time is around 700 samples. This is a reasonable result, considering the size of the signal component (Figure 2). For the 2nd simulation, the minimum sample size is slightly above 3000 samples. This increase in required sample size is reasonable considering the size and location of the 2nd signal component (Figure 5)
+Hence, the simulation shows that the minimum sample size for which the signal is discovered at least 90\% of the time is around 750-800 samples. This is a reasonable result, considering the size of the signal component (Figure 2). For the 2nd simulation, the minimum sample size is slightly above 3000 samples. This increase in required sample size can be the size and location of the 2nd signal component (Figure 5)
 
 
 \bibliographystyle{plain}

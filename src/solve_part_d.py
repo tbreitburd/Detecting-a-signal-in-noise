@@ -48,6 +48,7 @@ def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
     pdf_true = pdf(x, mu, sigma, lam, f, alpha, beta)
 
     # Plot
+    plt.figure(figsize=(7,5))
     plt.plot(x, f * signal_,'--',color = 'r', label='f x Signal, s(M; \u03BC, \u03C3)')
     plt.plot(x, (1-f)*background_,'--', color = 'g', label='(1-f) x Background, b(M; \u03BB)')
     plt.plot(x, pdf_true, color = 'k', label='PDF')
