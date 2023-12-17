@@ -393,6 +393,5 @@ def plot_discovery_rates(sample_sizes, discovery_rates, stdevs, part):
     elif part == 'g':
         plot_dir = os.path.join(plots_dir, 'plot_g.png')
     plt.savefig(plot_dir)
-    plt.show()
 
     return None

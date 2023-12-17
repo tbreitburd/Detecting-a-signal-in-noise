@@ -61,7 +61,6 @@ def plot_pdf_g(pdf, mu_1, mu_2, sigma, lam, f1, f2, alpha, beta):
     os.makedirs(plots_dir, exist_ok=True)
     plot_dir = os.path.join(plots_dir, 'plot_pdf_g.png')
     plt.savefig(plot_dir)
-    plt.show()
 
     return None
 

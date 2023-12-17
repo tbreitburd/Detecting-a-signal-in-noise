@@ -62,7 +62,6 @@ def plot_pdf_d_comp(pdf, mu, sigma, lam, f, alpha, beta):
     os.makedirs(plots_dir, exist_ok=True)
     plot_dir = os.path.join(plots_dir, 'plot_pdf_d_comp.png')
     plt.savefig(plot_dir)
-    plt.show()
 
     return None
 

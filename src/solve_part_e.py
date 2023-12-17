@@ -102,7 +102,6 @@ def plot_e(pdf, gen_sample, mu_hat, sigma_hat, lam_hat, f_hat, alpha, beta):
     os.makedirs(plots_dir, exist_ok=True)
     plot_dir = os.path.join(plots_dir, 'plot_pdf_e.png')
     plt.savefig(plot_dir)
-    plt.show()
 
     return None
 
@@ -195,7 +194,6 @@ os.makedirs(plots_dir, exist_ok=True)
 plot_dir = os.path.join(plots_dir, 'plot_profile_likelihood_e.png')
 plt.savefig(plot_dir)
 
-plt.show()
 
 
 # Plot the pdf with the estimated parameters
