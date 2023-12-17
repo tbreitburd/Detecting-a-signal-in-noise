@@ -1,3 +1,8 @@
+"""In this file, we plot the signal component, the background component, and
+total pdf of M, using the normalisation factor derived in (b),
+all overlaid on the same plot, using component-wise normaliation, 
+for the true parameters."""
+
 from funcs import pdf_norm, signal, background, signal_norm, background_norm
 import numpy as np
 import os

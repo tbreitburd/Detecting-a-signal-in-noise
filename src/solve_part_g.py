@@ -1,3 +1,15 @@
+"""In this file we generate a large pretend dataset from a new p.d.f. with 2 signal components
+using an accept-reject method. We then bootstrap a sample of the desired size
+from the large sample, and fit the pdf model and its parameters to that dataset.
+We then calculate the test statistic, T, and the p-value, i.e. the probability of
+rejecting the null hypothesis when it is true.
+We repeat this process 1000 times for each sample size, and calculate the
+discovery rate, i.e. the fraction of times the p-value is below the 5 sigma threshold.
+We plot the discovery rate as a function of sample size, and stop the loop when
+the discovery rate is above 90% for the last 3 sample sizes. We also plot the
+discovery rate with error bars of 3 standard deviations, calculated by bootstrapping
+the discovery rate 1000 times for each sample size."""
+
 from scipy.stats import chi2
 from iminuit import cost, Minuit
 import numpy as np
@@ -188,7 +200,7 @@ for sample_size in sample_sizes:
         T = null_min - alt_min
 
         # Set the number of degrees of freedom
-        alt_ndof = 2.13 # the number of degrees of freedom for the test statistic 
+        alt_ndof = 1.5885 # the number of degrees of freedom for the test statistic 
                         # distribution under the null hypothesis
                         # see ndof_for_part_f_g.py
 

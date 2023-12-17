@@ -1,3 +1,6 @@
+"""In this file we perform a fit of the number of degrees of freedom for the
+ T-statistic distribution, assuming it is chi2 distributed, for part f and g"""
+
 import numpy as np
 from scipy.stats import chi2
 from iminuit import cost, Minuit
@@ -50,8 +53,8 @@ for i in range(1000): # Run 1000 toys
     
     # Run the fit for the null hypothesis
     mi_null = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
-    mi_null.limits['f'] = (0.0001,1)
-    mi_null.limits['lam'] = (0.00001, None)
+    mi_null.limits['f'] = (0,1)
+    mi_null.limits['lam'] = (0, None)
     mi_null.values['f'] = 0 
     mi_null.fixed['f'] = True
     mi_null.values['mu'] = 5.2  # This doesn't matter, since f is fixed to 0
@@ -62,9 +65,9 @@ for i in range(1000): # Run 1000 toys
 
     # Run the fit for the alternate hypothesis
     mi_alt = Minuit(nll,  f = 0.2,  lam=0.4, mu=5.2, sigma = 0.02)
-    mi_alt.limits['f'] = (0.0001,1)
-    mi_alt.limits['lam'] = (0.00001, None)
-    mi_alt.limits['sigma'] = (0.00001, None)
+    mi_alt.limits['f'] = (0,1)
+    mi_alt.limits['lam'] = (0, None)
+    mi_alt.limits['sigma'] = (0, None)
     H_alt = mi_alt.migrad()
 
     alt_min = mi_alt.fval # Store the minimum of the fit
@@ -77,19 +80,25 @@ for i in range(1000): # Run 1000 toys
 # Define the cost function
 nll = cost.UnbinnedNLL(T_, chi2_pdf)
 
-# Use iminuit to minimise the cost function, with an initial guess of 1 degree of freedom
-m = Minuit(nll, df=1)
+# Use iminuit to minimise the cost function, with an initial guess of 0.5 degrees of freedom
+m = Minuit(nll, df=0.5)
 ndof_fit = m.migrad()
 
 print("The number of degrees of freedom for part f (T-statistic distribution under null hypothesis):"
        + "{:.4f} ± {:.4f}".format(ndof_fit.values['df'], ndof_fit.errors['df']))
 
+
+# We can plot the T-statistic distribution, and compare it to the chi2 distribution with 3 degrees of freedom from Wilk's
+# and the chi2 distribution fitted to the T-statistic distribution
+# We plot from just below 0 so that the peak at 0 can be observed
+# This is because Wilk's thrm is not truly valid for our case,
+# since the null hypothesis is on the boundary of the parameter space
 plt.figure()
 plt.hist(T_, bins=50, density=True, label='T-statistic distribution', 
-         color='grey', range=(0,10))
-plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
+         color='grey', range=(-0.001,10))
+plt.plot(np.linspace(-0.001,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
              color = 'red', label=r"$\chi^2$"+' distribution fitted (ndof = {:.4f})'.format(ndof_fit.values['df']))
-plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), 3),
+plt.plot(np.linspace(-0.001,10,1000), chi2.pdf(np.linspace(0,10,1000), 3),
           color = 'green', label=r"$\chi^2$"+" distribution from Wilk's (ndof = 3)")
 plt.xlabel('T')
 plt.ylabel('Normalised Counts')
@@ -126,9 +135,9 @@ for i in range(1000): # Run 1000 toys
         
     # Run the fit for the null hypothesis, just 1 signal component
     mi_null = Minuit(nll,  f1 = 0.2, f2 = 0.1, lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-    mi_null.limits['f1'] = (0.0001,1)
-    mi_null.limits['lam'] = (0.00001, None)
-    mi_null.limits['sigma'] = (0.00001, None)
+    mi_null.limits['f1'] = (0,1)
+    mi_null.limits['lam'] = (0, None)
+    mi_null.limits['sigma'] = (0, None)
     mi_null.values['f2'] = 0
     mi_null.fixed['f2'] = True
     mi_null.values['mu_2'] = 5.4  # This doesn't matter, since f2 is fixed to 0
@@ -139,12 +148,12 @@ for i in range(1000): # Run 1000 toys
 
     # Run the fit for the alternate hypothesis, 2 signal components
     mi_alt = Minuit(nll,  f1 = 0.2, f2 = 0.1,  lam=0.4, mu_1=5.3, mu_2=5.4, sigma = 0.02)
-    mi_alt.limits['f1'] = (0.00001,1)
-    mi_alt.limits['f2'] = (0.00001,1)
-    mi_alt.limits['lam'] = (0.00001, None)
-    mi_alt.limits['sigma'] = (0.0001, None)
-    mi_alt.limits['mu_1'] = (5,5.5999)
-    mi_alt.limits['mu_2'] = (5,5.5999)
+    mi_alt.limits['f1'] = (0,1)
+    mi_alt.limits['f2'] = (0,1)
+    mi_alt.limits['lam'] = (0, None)
+    mi_alt.limits['sigma'] = (0, None)
+    mi_alt.limits['mu_1'] = (5,5.6)
+    mi_alt.limits['mu_2'] = (5,5.6)
     H_alt = mi_alt.migrad()
 
     alt_min = mi_alt.fval # Store the minimum of the fit
@@ -163,12 +172,15 @@ ndof_fit = m.migrad()
 print("The number of degrees of freedom for part g (T-statistic distribution under null hypothesis):"
        + "{:.4f} ± {:.4f}".format(ndof_fit.values['df'], ndof_fit.errors['df']))
 
+
+# Same as part f, this time Wilk's thrm states that the T-statistic distribution 
+# should follow a chi2 distribution with 2 degrees of freedom
 plt.figure()
 plt.hist(T_, bins=50, density=True, label='T-statistic distribution', 
-         color='grey', range=(0,10))
-plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
+         color='grey', range=(-0.001,10))
+plt.plot(np.linspace(-0.001,10,1000), chi2.pdf(np.linspace(0,10,1000), ndof_fit.values['df']),
           color = 'red', label=r"$\chi^2$" + " distribution fitted (ndof = {:.4f})".format(ndof_fit.values['df']))
-plt.plot(np.linspace(0,10,1000), chi2.pdf(np.linspace(0,10,1000), 2),
+plt.plot(np.linspace(-0.001,10,1000), chi2.pdf(np.linspace(0,10,1000), 2),
           color = 'green', label=r"$\chi^2$"+" distribution from Wilk's (ndof = 2)")
 plt.xlabel('T')
 plt.ylabel('Normalised Counts')

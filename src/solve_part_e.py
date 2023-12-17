@@ -1,3 +1,11 @@
+"""In this file, we generate a pretend dataset from our defined p.d.f. using
+an accept-reject method. Using iminuit, we then fit the pdf model and its parameters
+to that dataset. With the obtained parameter estimates we plot the signal component,
+the background component, and total pdf of M, just like in the solve_part_d file.
+We also plot the actual generated sample, and the pull, calculated from the residuals
+of the generated sample and the predicted values from the fitted pdf model. """
+
+
 from funcs import accept_reject, pdf_norm_efg, cdf_efg, signal_norm_efg, background_norm_efg
 import numpy as np
 from iminuit import cost, Minuit
@@ -152,48 +160,6 @@ mu_est = mi_bin.values['mu']
 sigma_est = mi_bin.values['sigma']
 lam_est = mi_bin.values['lam']
 f_est = mi_bin.values['f']
-
-# From iminuit, we can plot the profile likelihoods for each parameter, with their 1-stdev errors.
-
-fig, ax = plt.subplots(2, 2, figsize=(8,8))
-subplot_titles = ['\u03BC', '\u03C3', '\u03BB', 'f']
-
-plt.suptitle('Profile Likelihoods of Parameters, with 1-stdev Errors')
-
-plt.subplot(2,2,1)
-mi_bin.draw_profile('mu',  band = True)
-plt.ylabel('Profile Negative Log-Likelihood')
-plt.xticks([5.2785, 5.279, 5.2795, 5.28, 5.2805])
-plt.title(subplot_titles[0])
-plt.grid()
-
-plt.subplot(2,2,2)
-mi_bin.draw_profile('sigma', band = True)
-plt.ylabel(None)
-plt.xticks([0.0175, 0.018, 0.0185, 0.019])
-plt.title(subplot_titles[1])
-plt.grid()
-
-plt.subplot(2,2,3)
-mi_bin.draw_profile('lam', band = True)
-plt.ylabel('Profile Negative Log-Likelihood')
-plt.title(subplot_titles[2])
-plt.grid()
-
-plt.subplot(2,2,4)
-mi_bin.draw_profile('f', band = True)
-plt.ylabel(None)
-plt.title(subplot_titles[3])
-plt.grid()
-
-plt.tight_layout()
-
-proj_dir = os.getcwd()
-plots_dir = os.path.join(proj_dir, 'plots')
-os.makedirs(plots_dir, exist_ok=True)
-plot_dir = os.path.join(plots_dir, 'plot_profile_likelihood_e.png')
-plt.savefig(plot_dir)
-
 
 
 # Plot the pdf with the estimated parameters
