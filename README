@@ -46,5 +46,11 @@ This can all be done within a Docker container, by building an image from the \t
 
 From there, all files can be run in the same manner as above.
 
-Note on time: The codes for part (c) to part (e) should each take less than a minute to run. For part (f), the code should take less than 5 minutes, with part (g) taking a little longer at The ```ndof_for_part_f_g.py``` is one of the more time consuming files to run, and could take around 10-15 minutes to run. This is based on running all of these on a MacBook Air M2 (2022, Ventura 13.2.1), with 8 GB of Memory.
+## Note on time
 
+The codes for part (c) to part (e) should each take less than a minute to run. For part (f), the code should take less than 5 minutes, with part (g) taking a little longer at The ```ndof_for_part_f_g.py``` is one of the more time consuming files to run, and could take around 10-15 minutes to run. This is based on running all of these on a MacBook Air M2 (2022, Ventura 13.2.1), with 8 GB of Memory.
+
+## Use of generative AI
+
+Copilot's autocompletion feature was used in coding the project, when writing docstrings for the functions, and when covering repetitive parts of the code, like part (f) and (g)'s hypothesis testing.
+ChatGPT was used to help in debugging the code, by providing the tracebacks when an error was difficult to understand.
